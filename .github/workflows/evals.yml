@@ -1,0 +1,52 @@
+name: Tier evals (manual, real LLM)
+
+# Runs the 7 tier test cases against the real model. It costs money, the output is not deterministic,
+# and Vân reads and judges the results, so it is manual and never blocks CI.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "full = like a mother's experience, llm-only = skip the keyword match, both = run both"
+        type: choice
+        options: [both, full, llm-only]
+        default: both
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      # Set the model as a repository variable (Settings > Secrets and variables > Actions > Variables).
+      ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - run: pip install -e .
+      - name: Check configuration
+        run: |
+          test -n "$ANTHROPIC_API_KEY" || { echo "Missing secret ANTHROPIC_API_KEY"; exit 1; }
+          test -n "$ANTHROPIC_MODEL" || { echo "Missing repository variable ANTHROPIC_MODEL"; exit 1; }
+          echo "Model: $ANTHROPIC_MODEL"
+      - name: Full pipeline
+        if: inputs.mode != 'llm-only'
+        run: python -m evals.run_tier_evals
+      - name: LLM only
+        if: inputs.mode != 'full'
+        run: python -m evals.run_tier_evals --llm-only
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tier-evals
+          path: backend/evals/out/
+          if-no-files-found: warn
