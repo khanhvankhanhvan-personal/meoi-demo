@@ -69,4 +69,5 @@ Checks that CI runs (run them from the folder shown):
   on the real model and uploads the reports as the `tier-evals` artifact. One-time setup in the GitHub repo:
   secret `ANTHROPIC_API_KEY` (Settings > Secrets and variables > Actions > Secrets) and variable
   `ANTHROPIC_MODEL` (same page > Variables). It is not part of CI because it costs money and is not deterministic.
-- Deployment (`deploy.yml`) comes with M4.
+- `.github/workflows/deploy.yml` verifies a deployment: after CI passes on `main`, Render deploys (`render.yaml`), and
+  this workflow waits for the new version and smoke-tests the public URL. Setup guide: `docs/deploy-render.md`.

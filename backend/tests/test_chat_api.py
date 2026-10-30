@@ -224,7 +224,7 @@ def test_logs_never_contain_message_text(
 
 
 def test_health(client: TestClient) -> None:
-    assert client.get("/health").json() == {"status": "ok"}
+    assert client.get("/health").json()["status"] == "ok"
 
 
 def test_llm_reply_with_only_a_tag_gives_502_not_an_empty_bubble(client: TestClient) -> None:

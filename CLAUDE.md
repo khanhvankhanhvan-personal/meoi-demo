@@ -95,6 +95,6 @@ Total ~28-40 hrs. **Cut line for 2026-11-04:** M0-M4 are must-have. M5 only if M
 1. PIN recovery: one-time recovery code shown at signup (keeps anonymity, can be lost).
 2. Tier 3 incident log: also store the triggering message (useful for review, sensitive).
 3. Memory retention: auto-expire after 15 days.
-4. Hosting provider and budget (free tier by default). Vân must create her own Anthropic API key with a spend limit.
+4. Hosting provider and budget (free tier by default). Vân must create her own Anthropic API key with a spend limit. => decided 2026-10-30: Render free plan (Singapore), no international card; see `docs/adr/005-hosting.md`.
 5. Legal check for storing health-related personal data of Vietnamese users in a beta. Not yet researched; do not claim compliance.
 6. Whether the pin/memory feature is added to `docs/scope-doc-v2-vi.md` in-scope list (currently silent; the "deep ML personalization" exclusion should not be read as covering LLM memory).=> not yet.
