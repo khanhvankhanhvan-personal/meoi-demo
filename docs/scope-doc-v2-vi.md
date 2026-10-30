@@ -45,8 +45,9 @@ Trong phần lớn trường hợp, mẹ sẽ không mở app và gõ thẳng "e
 5. **Quá tải giác quan / "touched out"** — Sau một ngày dài liên tục bị chạm vào và cần đến, mẹ chỉ muốn thoát khỏi chính cơ thể mình, mà không có ngôn từ nào để diễn tả cảm giác đó ngoài việc nghĩ "chắc mình có vấn đề gì đó mới cảm thấy thế này."
 6. **Cơ thể đang hồi phục bị lãng quên** — Mẹ vẫn đang hồi phục thể chất (vết khâu tầng sinh môn hoặc sinh mổ, ra máu, v.v.) nhưng mọi cuộc trò chuyện đều xoay quanh em bé. Mẹ không chắc đâu là dấu hiệu hồi phục bình thường, đâu là dấu hiệu cảnh báo, và không muốn hỏi vì sợ bị cho là làm quá.
 7. **Căng thẳng trong mối quan hệ** — Thiếu ngủ và kiệt sức, những bất đồng nhỏ với bạn đời leo thang nhanh chóng, và mẹ không biết đây là căng thẳng bình thường của giai đoạn này hay là dấu hiệu của vấn đề thực sự.
+8. **Áp lực tiền bạc và quay lại công việc** *(thêm ở v2.1)* — Chi phí nuôi con tăng đúng lúc thu nhập của mẹ giảm hoặc mất hẳn. Mẹ thót tim trước giá sữa, tã, viện phí, lo vị trí công việc của mình đã thay đổi khi vắng mặt, rồi tự trách mình. Mẹ dễ giấu nỗi lo này vì thấy nó "không phải chuyện cảm xúc". v1 chỉ xác nhận gánh nặng này là có thật, không đưa lời khuyên tài chính cụ thể, và khuyến khích mẹ nói ra với người thân tin cậy.
 
-*Bất cứ điều gì v1 xây dựng đều phải bắt nguồn từ một trong bảy tình huống này. Nếu không, đó không phải là v1.*
+*Bất cứ điều gì v1 xây dựng đều phải bắt nguồn từ một trong tám tình huống này. Nếu không, đó không phải là v1.*
 
 ## Trong Scope — V1
 
