@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 /* ---------------------------------------------------------------
    MeOi ("Mẹ Ơi!") — prototype (v4)
    Standalone visual + conversational prototype. Not wired to Bubble.
+   Knowledge base synced with content-framework-v2.1 (35 entries, 8 scenarios).
+   NOTE: uses window.storage (Claude Artifact runtime only) - see README.md.
 ----------------------------------------------------------------*/
 
 const FONT_LINK =
@@ -92,30 +94,30 @@ TIER 3 — ALWAYS ESCALATE: bất kỳ điều gì sai hoặc chậm có thể g
 [T1] Tiếc nuối cuộc sống cũ không có nghĩa là không yêu con — hai cảm xúc tồn tại song song bình thường.
 [T1] Không nhận ra cơ thể/khuôn mặt mình trong gương sau sinh là phản ứng phổ biến, thường dịu theo thời gian.
 [T1] Vừa yêu con vô cùng vừa nhớ cuộc sống cũ đều bình thường — không phải ích kỷ.
-[T1] Nhịp bú/ngủ của con cuốn trọn ngày mẹ — nếu mẹ không nhớ nổi lần cuối làm gì cho riêng mình, đó là matrescence, không phải đánh mất bản thân. (Entry #28)
+[T1] Cả ngày xoay quanh con rồi thấy mình "biến mất" là cảm giác phổ biến của matrescence — không phải thiếu yêu con; một việc nhỏ chỉ dành cho mẹ cũng nhắc mình vẫn còn đó.
 [T1] Kiêng cữ mang giá trị văn hóa nhưng không phải mọi quan niệm đều có cơ sở y khoa — mẹ có quyền dung hòa truyền thống với khuyến nghị bác sĩ.
 [T1] Cô đơn dù nhà đầy người là nghịch lý thật của hậu sản — không phải vô ơn hay yếu đuối.
 [T1] Bất lực khi mẹ chồng/mẹ ruột chăm cháu khác ý mình — nói rõ, nhẹ nhàng, kiên định thường bền vững hơn im lặng chịu đựng hoặc bùng nổ.
 [T1] Mẹ có quyền chủ động nói ra nhu cầu được quan tâm của mình, không cần chờ ai hỏi.
-[T1] Mọi người hỏi han con bú/ngủ/tăng cân nhưng không ai hỏi mẹ có ngủ được không — cảm giác bị bỏ quên là nghịch lý thật của hậu sản, không phải mẹ nhạy cảm quá mức. (Entry #29)
+[T1] Khách chỉ bế/khen con, mẹ thấy vô hình và tủi là điều dễ hiểu, không phải ích kỷ — mẹ có thể nói với người thân tin cậy rằng mẹ cũng cần được hỏi thăm.
 [T2] Cảm giác sữa "không đủ" thường không phản ánh đúng thực tế — nếu bé đủ tã ướt và tăng cân đều theo lịch khám, đây thường là dấu hiệu ổn.
 [T3-Physical] Ngực sưng đỏ, đau kèm sốt, vùng cứng không giảm sau khi cho bú/hút sữa → có thể tắc tia sữa/viêm vú, cần bác sĩ hoặc lactation consultant kiểm tra sớm.
 [T1] Dùng sữa công thức vì bất kỳ lý do gì không làm mẹ kém hơn — bé được nuôi đủ và mẹ ổn định tinh thần quan trọng hơn một tiêu chuẩn duy nhất.
 [T3-Physical] Bé bú thường xuyên nhưng không tăng cân đủ, đi tiểu ít, vàng da kéo dài → đưa bé khám bác sĩ nhi ngay, không tự điều chỉnh tại nhà.
 [T1] Muốn "thoát" khỏi việc bị chạm vào liên tục (kể cả bởi bạn đời) là phản ứng thần kinh thật khi cơ thể quá tải — không phải không yêu con/chồng.
 [T1] Xin 10-15 phút không ai chạm vào mỗi ngày là nhu cầu hợp lý, không ích kỷ.
-[T1] Con chỉ chịu mẹ bế dù mẹ đã rất mệt — phổ biến vì con tìm an toàn quen thuộc ở mẹ; muốn "thoát" một lúc không có nghĩa là không yêu con, mà là dấu hiệu cơ thể cần nghỉ giác quan. (Entry #30)
+[T1] Bé chỉ chịu mẹ bế khiến cơ thể mẹ không còn thuộc về mình; muốn "trốn" cái chạm là phản ứng quá tải bình thường — xin người thân đỡ vài phút là nhu cầu chính đáng, không phải bỏ rơi con.
 [T2] Cơ thể cần 6-8 tuần hồi phục cơ bản (lâu hơn nếu sinh mổ), một số chức năng mất nhiều tháng — đây là quá trình, không phải deadline.
 [T1] Không ai hỏi vết khâu của mẹ đã đỡ chưa là trải nghiệm phổ biến dù không công bằng — mẹ có quyền chủ động chia sẻ.
 [T2] Đau khi quan hệ trở lại sau sinh rất phổ biến, thường do thay đổi nội tiết/mô chưa hồi phục — dùng gel bôi trơn, giao tiếp cởi mở, cho cơ thể thêm thời gian.
 [T3-Physical] Rò rỉ nước tiểu khi ho/cười, nặng/sa vùng chậu, đau vùng chậu kéo dài → cần bác sĩ hoặc chuyên gia phục hồi sàn chậu, tình trạng phổ biến và điều trị được.
-[T1] Lịch khám/tiêm của con được nhắc từng tuần nhưng lịch tái khám sau sinh của mẹ dễ bị quên — mẹ có quyền tự đặt lịch cho mình, không cần chờ ai nhắc. (Entry #31)
+[T2] Con ngủ mà mẹ vẫn đau vết khâu/vết mổ, rã rời — cơ thể vẫn đang hồi phục, nghỉ ngơi là một phần của quá trình; mức đau và tốc độ khác nhau mỗi người, nếu đau tăng dần hoặc khác hẳn lời dặn thì hỏi bác sĩ.
 [T1] Mâu thuẫn tăng sau khi có con (thiếu ngủ, đổi vai trò, ít thời gian cho nhau) thường là giai đoạn sẽ dịu lại, không phải dấu hiệu tan vỡ.
 [T1] Cảm thấy một mình trong hôn nhân dù bạn đời vẫn ở đó — nói cụ thể điều mình cần thường hiệu quả hơn chờ đối phương tự hiểu.
-[T1] Con quấy đúng lúc bố vừa đi làm về khiến hai vợ chồng không kịp nói chuyện — lặp lại mỗi ngày dễ thấy xa cách dù vẫn ở cạnh nhau; đây là giai đoạn cần thêm thông cảm, không phải dấu hiệu mối quan hệ có vấn đề. (Entry #32)
-[T1] Áp lực tiền bạc sau sinh là một gánh nặng có thật — chi phí tăng đúng lúc thu nhập giảm hoặc mất hẳn, đây không phải điều mẹ tưởng tượng ra hay phóng đại.
-[T1] Lo lắng về việc quay lại công việc, hoặc sợ vị trí của mình đã thay đổi khi vắng mặt, là nỗi lo rất phổ biến — không có nghĩa là mẹ kém cỏi hay bị bỏ lại phía sau.
-[T1] Mình không thể đưa lời khuyên tài chính cụ thể cho tình huống của mẹ, nhưng nói ra gánh nặng này với người bạn đời hoặc người thân tin cậy — thay vì tự gánh trong im lặng — thường là bước đầu nhẹ nhõm hơn mẹ nghĩ.
+[T1] Bé quấy đúng lúc bố đi làm về dễ khiến cả hai căng — thường trùng lúc mẹ cạn sức, không phải lỗi ai; một câu cụ thể về điều mẹ cần hiệu quả hơn để hai người tự đoán ý nhau.
+[T1] Áp lực tiền bạc sau sinh là gánh nặng có thật — chi phí tăng đúng lúc thu nhập giảm hoặc mất hẳn, không phải mẹ tưởng tượng hay phóng đại; áp lực tài chính cũng là yếu tố được ghi nhận làm hậu sản nặng nề hơn. (Nếu kèm tuyệt vọng/ý nghĩ tự hại → chuyển T3-Psychiatric, không tự trấn an.)
+[T1] Lo về việc quay lại công việc, sợ vị trí của mình đã thay đổi khi vắng mặt, là nỗi lo rất phổ biến — không có nghĩa mẹ kém cỏi hay bị bỏ lại phía sau.
+[T1] Thót tim vì chi phí nuôi con rồi tự trách là cảm giác nhiều mẹ có, không nói lên mẹ thiếu sót; không đưa lời khuyên tài chính cụ thể, nhưng nói ra gánh nặng với bạn đời/người thân tin cậy thay vì tự gánh trong im lặng thường nhẹ nhõm hơn.
 [T3-Safety] Mâu thuẫn kèm đe dọa/kiểm soát/bạo lực dưới bất kỳ hình thức nào → không còn là căng thẳng bình thường, liên hệ CSAGA (024 3333 5599) hoặc Ngôi nhà Bình yên (1900 969 680).
 [T3-Psychiatric] Ý nghĩ muốn làm hại bản thân hoặc em bé — dù chỉ thoáng qua — cần hỗ trợ ngay, không phải điều mẹ nên tự xử lý một mình. Trong giờ: HOPE (0865 044 400). Ngoài giờ/khẩn cấp: 115 hoặc bệnh viện gần nhất ngay.
 
