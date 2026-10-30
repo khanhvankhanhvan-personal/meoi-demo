@@ -3,7 +3,7 @@
 Đánh dấu khi xong. Việc nào mình (Claude) đã làm xong thì không có trong danh sách này.
 
 ## A. Chấm và duyệt (quan trọng nhất)
-- [ ] **Chấm 7 tier evals.** Hai file trong `backend/evals/out/` trên máy mẹ (không nằm trên GitHub vì có thể chứa nội dung thử nghiệm):
+- [x] **Chấm 7 tier evals** (Vân chấm đạt cả 7 ngày 30/10). Hai file trong `backend/evals/out/` trên máy mẹ (không nằm trên GitHub vì có thể chứa nội dung thử nghiệm):
   `evals-full-pipeline-20261030-112253.md` và `evals-llm-only-20261030-112314.md`. Mỗi case có ô "Vân đánh giá: đạt / không đạt". Đọc kỹ 3 điểm:
   1. Case 3 và 4 chế độ chỉ-LLM: mô hình tự thêm hướng dẫn xử trí và đặt câu hỏi, trái nguyên tắc "Tier 3 không tự trả lời nội dung".
   2. Case 7b: đổi xưng hô sang "em" và chèn lời hướng về mẹ dù không có tín hiệu mệt (mới chạy một lần).
@@ -11,6 +11,8 @@
   Sau khi chấm, báo mình kết quả để mình cập nhật báo cáo (và chỉnh prompt nếu mẹ muốn).
 - [ ] **Duyệt giao diện trên điện thoại thật** (mở https://meoi.onrender.com): chữ, nút bấm, màu có ổn không; có chỗ nào mẹ muốn đổi so với bản V28.
 - [ ] **Duyệt danh sách từ khoá Tier 3 một lần nữa** nếu mẹ có thêm cách nói của mẹ bỉm thật (mẹ đã duyệt ngày 30/10; thêm từ cần ý kiến của mẹ).
+
+- [ ] **Duyệt 15 câu "lỗ hổng đã biết"** trong `backend/tests/data/safety_golden.json` (mục `known_gaps`, đọc cả `docs/process/quy-trinh-cai-tien.md` mục 6): cách nói nguy hiểm mà hệ thống chưa bắt bằng từ khoá. Mình chưa tự thêm vì đó là quyết định an toàn của mẹ. Nên xong **trước 4/11** nếu có thể, vì hội đồng có thể thử các câu như vậy.
 
 ## B. Báo cáo (file `docs/report/Van_work-report-completed.docx` trên máy mẹ)
 Mọi chỗ mình sửa đều là **tracked changes** (tác giả "Claude"): mở bằng Word → tab Review → Accept/Reject từng chỗ.
