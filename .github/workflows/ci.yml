@@ -71,3 +71,13 @@ jobs:
       - name: Stop the stack
         if: always()
         run: docker compose down -v
+      # The production image (web app + API in one container) is what Render builds.
+      - name: Build and smoke test the production image
+        run: |
+          docker build -t meoi-prod .
+          docker run -d --name meoi-prod -e PORT=10000 -p 10000:10000 meoi-prod
+          for i in $(seq 1 30); do curl -fsS http://localhost:10000/health && break || sleep 2; done
+          BASE=http://localhost:10000 bash scripts/compose-smoke.sh
+      - name: Production image logs on failure
+        if: failure()
+        run: docker logs meoi-prod --tail 100

@@ -1,0 +1,44 @@
+name: Verify deployment
+
+# Render deploys by itself once CI passes on main (render.yaml: autoDeployTrigger: checksPass).
+# This workflow waits for the new version to be live and then smoke-tests the PUBLIC url.
+# It does nothing until the repository variable PUBLIC_URL is set (Settings > Secrets and variables >
+# Actions > Variables), e.g. https://meoi.onrender.com (no trailing slash).
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: vars.PUBLIC_URL != '' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      URL: ${{ vars.PUBLIC_URL }}
+      SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - name: Wait for the new version to be live
+        run: |
+          # A free instance may be asleep (about a minute to wake) or still building the new version.
+          for i in $(seq 1 45); do
+            body=$(curl -fsS --max-time 90 "$URL/health" || true)
+            echo "attempt $i: $body"
+            case "$body" in
+              *'"status":"ok"'*"$SHA"*) echo "New version is live."; exit 0 ;;
+              # If the host does not expose the commit, accept a healthy service after 5 minutes.
+              *'"status":"ok"'*'"commit":"unknown"'*) [ "$i" -ge 15 ] && { echo "::warning::commit not exposed; version not verified"; exit 0; } ;;
+            esac
+            sleep 20
+          done
+          echo "::error::The new version did not become live in time"; exit 1
+      - name: Smoke test the public site
+        run: BASE="$URL" bash scripts/compose-smoke.sh
