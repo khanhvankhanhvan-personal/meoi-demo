@@ -17,7 +17,13 @@ def test_profile_round_trip(client: TestClient) -> None:
     empty = client.get("/profile").json()
     assert empty["profile"] is None and len(empty["babies"]) == 1
     assert client.put("/profile", json=PROFILE).status_code == 200
-    assert client.get("/profile").json() == PROFILE
+    legacy_defaults: dict[str, object] = {
+        "csection_kind": None,
+        "recovery_feel": None,
+        "support_needs": [],
+    }
+    expected = {**PROFILE, "profile": {**PROFILE["profile"], **legacy_defaults}}  # type: ignore[dict-item]
+    assert client.get("/profile").json() == expected
     twins = {**PROFILE, "babies": [{"label": "A"}, {"label": "B"}]}
     client.put("/profile", json=twins)
     assert [b["label"] for b in client.get("/profile").json()["babies"]] == ["A", "B"]

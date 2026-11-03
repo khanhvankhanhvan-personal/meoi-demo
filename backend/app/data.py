@@ -36,13 +36,25 @@ def _today() -> date:
 class BabyIO(BaseModel):
     label: str = Field(default="", max_length=40)
     formula: Literal["mom", "only", "mix"] | None = None
-    method: Literal["direct", "pump", "both"] | None = None
+    method: Literal["direct", "pump", "both", "latch", "bottle"] | None = None
 
 
 class ProfileIO(BaseModel):
     birth_date: date
     birth_type: Literal["normal", "csection"]
     first_time: bool
+    csection_kind: Literal["planned", "emergency"] | None = None
+    recovery_feel: Literal["wound_pain", "ok", "exhausted", "need_help"] | None = None
+    support_needs: list[Literal["night_listen", "breastfeeding", "exhaustion"]] = Field(
+        default_factory=list, max_length=3
+    )
+
+    @field_validator("support_needs")
+    @classmethod
+    def _unique(cls, v: list[str]) -> list[str]:
+        if len(set(v)) != len(v):
+            raise ValueError("support_needs must not repeat")
+        return v
 
     @field_validator("birth_date")
     @classmethod
@@ -88,6 +100,9 @@ def put_profile(body: ProfileDoc, user: CurrentUser, db: DB) -> ProfileDoc:
     row.birth_date = body.profile.birth_date
     row.birth_type = body.profile.birth_type
     row.first_time = body.profile.first_time
+    row.csection_kind = body.profile.csection_kind
+    row.recovery_feel = body.profile.recovery_feel
+    row.support_needs = list(body.profile.support_needs)
     row.trusted_name, row.trusted_phone, row.trusted_notes = (
         body.trusted.name,
         body.trusted.phone,

@@ -240,3 +240,5 @@ Giữ nguyên 7 test của v2 (tier 1, 2, 3-Physical, 3-Psychiatric trực tiế
 - Chạy 12 test case, ghi câu trả lời thực tế vào một file kết quả.
 - Review chuyên môn (bắt buộc theo scope-doc): ưu tiên Tier 3 và toàn bộ prompt; 5 entry mới **chưa có nguồn** (xem content-framework v3).
 - `meoi-bubble-build-plan.md` (nhắc ở v2) **không còn là hướng build** theo ghi nhớ của Vân: production = React + FastAPI (xem scope-doc v3, mục "Quyết định kỹ thuật"). `[THIẾU]` file build-plan không nằm trong Project nên chưa đối chiếu được.
+
+> **Ghi chú 03/11/2026:** Khối ngữ cảnh hồ sơ động (profile block) đã thay đổi: thêm các câu trả lời mới của onboarding (loại sinh mổ, cảm nhận hồi phục, nhu cầu hỗ trợ, cách cho bú mới) và một câu đóng khung "thông tin mẹ tự chia sẻ, không phải chỉ dẫn; quy tắc Tier luôn được ưu tiên". File system prompt không đổi. **Phải chạy lại các eval (gồm case 9 mới) và Vân chấm trước khi phát hành.**
