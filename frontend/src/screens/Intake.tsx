@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Choice } from "../components/Chips";
 import { FEED_FORMULA, FEED_METHOD } from "../content";
-import { birthDateError, kf, weeksOld } from "../lib/dates";
+import { WheelDatePicker } from "../components/WheelDatePicker";
+import { ageLabel, birthDateError, kf } from "../lib/dates";
 import { emptyBaby, useStore } from "../store";
 import type { Baby, Formula } from "../types";
 
@@ -21,12 +22,11 @@ export function Intake() {
   const [step, setStep] = useState(0);
   const [multi, setMulti] = useState<boolean | null>(null);
   const [count, setCount] = useState(2);
-  const [birth, setBirth] = useState("");
+  const [birth, setBirth] = useState(() => kf(new Date()));
   const [birthType, setBirthType] = useState<"normal" | "csection" | null>(null);
   const [parity, setParity] = useState<"first" | "other" | null>(null);
   const [babies, setBabies] = useState<Baby[]>([emptyBaby()]);
 
-  const today = kf(new Date());
   const dateError = birth ? birthDateError(birth) : null;
   const n = multi ? count : 1;
 
@@ -101,30 +101,23 @@ export function Intake() {
               </button>
             </div>
           )}
-          <button className="btn primary" disabled={multi === null} onClick={() => setStep(1)}>
-            Tiếp tục
-          </button>
+          <div className="actions">
+            <button className="btn primary" disabled={multi === null} onClick={() => setStep(1)}>
+              Tiếp tục
+            </button>
+          </div>
         </>
       )}
 
       {step === 1 && (
         <>
           <h2>Con sinh ngày nào vậy mẹ ơi?</h2>
-          <label className="field">
-            <span className="sr-only">Ngày sinh của con</span>
-            <input
-              type="date"
-              value={birth}
-              max={today}
-              onChange={(e) => setBirth(e.target.value)}
-              aria-invalid={!!dateError}
-            />
-          </label>
+          <WheelDatePicker label="Ngày sinh của con" value={birth} onChange={setBirth} />
           {dateError && <p className="error">{dateError}</p>}
           {birth && !dateError && (
-            <p className="muted">Như vậy, con đã được khoảng {weeksOld(birth)} tuần tuổi.</p>
+            <p className="muted">Như vậy, con đã được khoảng {ageLabel(birth)}.</p>
           )}
-          <div className="row">
+          <div className="actions">
             <button className="btn" onClick={() => setStep(0)}>
               Quay lại
             </button>
@@ -182,7 +175,7 @@ export function Intake() {
             Không bắt buộc — nhưng sẽ giúp mình hiểu và đồng hành cùng mẹ tốt hơn. Mẹ có thể thêm, sửa hoặc
             xoá bất cứ lúc nào.
           </p>
-          <div className="row">
+          <div className="actions">
             <button className="btn" onClick={() => setStep(1)}>
               Quay lại
             </button>

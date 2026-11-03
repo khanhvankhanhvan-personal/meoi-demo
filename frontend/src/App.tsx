@@ -34,7 +34,14 @@ function Screens() {
 export default function App({ api, initial }: { api?: Api; initial?: State }) {
   return (
     <StoreProvider api={api} initial={initial}>
-      <Screens />
+      {/* On wide screens the app is drawn inside a phone-shaped frame; on phones it is full-bleed. */}
+      <div className="stage">
+        <div className="device">
+          <div className="screen">
+            <Screens />
+          </div>
+        </div>
+      </div>
     </StoreProvider>
   );
 }

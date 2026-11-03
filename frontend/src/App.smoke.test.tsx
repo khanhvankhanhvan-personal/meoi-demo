@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import App from "./App";
@@ -38,8 +38,11 @@ describe("smoke: intake -> check-in -> chat", () => {
     // step 2: birth date six weeks ago
     const sixWeeksAgo = new Date();
     sixWeeksAgo.setDate(sixWeeksAgo.getDate() - 42);
-    fireEvent.change(screen.getByLabelText("Ngày sinh của con"), { target: { value: kf(sixWeeksAgo) } });
-    expect(screen.getByText(/khoảng 6 tuần tuổi/)).toBeInTheDocument();
+    const wheel = (name: string) => within(screen.getByRole("listbox", { name }));
+    await user.click(wheel("Năm").getByRole("option", { name: String(sixWeeksAgo.getFullYear()) }));
+    await user.click(wheel("Tháng").getByRole("option", { name: `Tháng ${sixWeeksAgo.getMonth() + 1}` }));
+    await user.click(wheel("Ngày").getByRole("option", { name: String(sixWeeksAgo.getDate()) }));
+    expect(screen.getByText(/khoảng 1 tháng tuổi/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Tiếp tục" }));
 
     // step 3: profile
