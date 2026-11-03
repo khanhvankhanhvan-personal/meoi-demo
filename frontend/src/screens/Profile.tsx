@@ -1,3 +1,4 @@
+import { AccountCard } from "../components/AccountCard";
 import { Choice } from "../components/Chips";
 import { SupportList } from "../components/SupportList";
 import { FEED_FORMULA, FEED_METHOD } from "../content";
@@ -14,6 +15,7 @@ export function Profile() {
   return (
     <div className="page">
       <h1 className="serif">Hồ sơ của mẹ</h1>
+      <AccountCard />
       {p && (
         <section className="card">
           <h3>Cách sinh</h3>

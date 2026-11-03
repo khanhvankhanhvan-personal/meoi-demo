@@ -41,4 +41,4 @@ jobs:
           done
           echo "::error::The new version did not become live in time"; exit 1
       - name: Smoke test the public site
-        run: BASE="$URL" bash scripts/compose-smoke.sh
+        run: SMOKE_ACCOUNTS=1 BASE="$URL" bash scripts/compose-smoke.sh

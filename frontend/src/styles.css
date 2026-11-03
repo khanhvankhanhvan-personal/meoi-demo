@@ -172,3 +172,14 @@ blockquote { margin: 8px 0 0; padding-left: 12px; border-left: 3px solid var(--p
   .screen::-webkit-scrollbar { display: none; }
   .shell, .page.onboarding, .page.intake { box-shadow: none; max-width: none; }
 }
+
+/* Accounts */
+.auth-form { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.auth-links { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; margin: 12px 0 4px; }
+.recovery-code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 22px; letter-spacing: 0.06em; font-weight: 700; text-align: center; background: var(--pink-light); border: 2px dashed var(--pink); border-radius: var(--radius); padding: 18px 8px; margin: 14px 0; user-select: all; }
+.check { display: flex; gap: 10px; align-items: center; margin: 14px 0 0; }
+.check input { width: 22px; height: 22px; accent-color: var(--pink); }
+.btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.danger-link { color: var(--danger); margin-top: 10px; }
+.danger-box { background: var(--danger-surface); border-radius: 12px; padding: 12px 14px; margin-top: 10px; }
+.nudge .actions { margin-top: 12px; }

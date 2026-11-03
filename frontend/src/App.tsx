@@ -1,4 +1,6 @@
 import { AppShell } from "./components/AppShell";
+import { Auth } from "./screens/Auth";
+import { Recovery } from "./screens/Recovery";
 import { Checkin } from "./screens/Checkin";
 import { Chat } from "./screens/Chat";
 import { History } from "./screens/History";
@@ -11,11 +13,16 @@ import type { Api } from "./lib/api";
 
 function Screens() {
   const { state } = useStore();
+  if (state.booting) return <div className="page muted">Đang mở…</div>;
   switch (state.screen) {
     case "onboarding":
       return <Onboarding />;
     case "intake":
       return <Intake />;
+    case "auth":
+      return <Auth />;
+    case "recovery":
+      return <Recovery />;
     default:
       break;
   }
@@ -31,9 +38,17 @@ function Screens() {
   );
 }
 
-export default function App({ api, initial }: { api?: Api; initial?: State }) {
+export default function App({
+  api,
+  initial,
+  restoreSession,
+}: {
+  api?: Api;
+  initial?: State;
+  restoreSession?: boolean;
+}) {
   return (
-    <StoreProvider api={api} initial={initial}>
+    <StoreProvider api={api} initial={initial} restoreSession={restoreSession}>
       {/* On wide screens the app is drawn inside a phone-shaped frame; on phones it is full-bleed. */}
       <div className="stage">
         <div className="device">

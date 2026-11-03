@@ -37,6 +37,9 @@ export function Onboarding() {
       <button className="btn primary" onClick={last ? start : () => setI(i + 1)}>
         {last ? "Bắt đầu" : "Tiếp tục"}
       </button>
+      <button className="link" onClick={() => dispatch({ type: "go", screen: "auth" })}>
+        Mình đã có tài khoản
+      </button>
     </div>
   );
 }

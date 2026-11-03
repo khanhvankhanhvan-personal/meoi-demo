@@ -53,7 +53,7 @@ The `meoi.html` V28 file itself is not in this repo yet: ask Vân to add it unde
 - 6-digit PIN, hashed with argon2id. Constant-time verification. Generic error messages (do not reveal whether a nickname exists).
 - Rate limit + exponential lockout per nickname and per IP.
 - Session: short-lived access token + refresh token in httpOnly, Secure, SameSite cookies.
-- Forgot PIN = no email recovery. Recovery code: see Open decisions.
+- Forgot PIN = no email recovery. One-time recovery code shown at signup (decided 2026-11-03, see `docs/adr/006-accounts-and-database.md`).
 
 ## API delta vs spec section 9
 
@@ -92,7 +92,7 @@ Total ~28-40 hrs. **Cut line for 2026-11-04:** M0-M4 are must-have. M5 only if M
 
 ## Open decisions (ask Vân; do not guess)
 
-1. PIN recovery: one-time recovery code shown at signup (keeps anonymity, can be lost).
+1. PIN recovery: one-time recovery code shown at signup (keeps anonymity, can be lost). => decided 2026-11-03: yes.
 2. Tier 3 incident log: also store the triggering message (useful for review, sensitive).
 3. Memory retention: auto-expire after 15 days.
 4. Hosting provider and budget (free tier by default). Vân must create her own Anthropic API key with a spend limit. => decided 2026-10-30: Render free plan (Singapore), no international card; see `docs/adr/005-hosting.md`.

@@ -13,6 +13,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 STATIC_DIR=/srv/web
 WORKDIR /srv
 COPY backend/pyproject.toml ./
 COPY backend/app ./app
+COPY backend/alembic.ini ./
+COPY backend/migrations ./migrations
 RUN pip install --no-cache-dir .
 COPY --from=web /app/dist /srv/web
 
@@ -21,4 +23,5 @@ USER meoi
 
 # Render injects $PORT; 10000 is its default.
 EXPOSE 10000
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+# Apply database migrations first (skipped when no database is configured), then start the API.
+CMD ["sh", "-c", "[ -z \"$DATABASE_URL\" ] || alembic upgrade head; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]

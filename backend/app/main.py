@@ -5,7 +5,10 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+from app.auth import account_router
+from app.auth import router as auth_router
 from app.chat import router as chat_router
+from app.data import router as data_router
 from app.support import router as support_router
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -15,6 +18,9 @@ def build_api() -> FastAPI:
     api = FastAPI(title="MeOi! API", version="0.0.1")
     api.include_router(chat_router)
     api.include_router(support_router)
+    api.include_router(auth_router)
+    api.include_router(account_router)
+    api.include_router(data_router)
 
     @api.get("/health")
     def health() -> dict[str, str]:

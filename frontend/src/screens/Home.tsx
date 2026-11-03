@@ -41,8 +41,27 @@ export function Home() {
     setQuick([]);
   };
 
+  const guestMessages = state.messages.filter((m) => m.role === "user").length;
+  const showNudge = !state.user && !state.nudgeDismissed && guestMessages >= 2;
+
   return (
     <div className="page">
+      {showNudge && (
+        <section className="card soft nudge">
+          <h3>Mẹ muốn mình nhớ giúp mẹ?</h3>
+          <p className="muted small">
+            Tạo tài khoản ẩn danh (chỉ cần biệt danh và mã PIN) để giữ lại hồ sơ, check-in và ghi chú đã ghim.
+          </p>
+          <div className="actions">
+            <button className="btn" onClick={() => dispatch({ type: "dismissNudge" })}>
+              Để sau
+            </button>
+            <button className="btn primary" onClick={() => dispatch({ type: "go", screen: "auth" })}>
+              Tạo tài khoản
+            </button>
+          </div>
+        </section>
+      )}
       {state.profile && (
         <section className="card hero">
           <div className="serif hero-title">Tuần {weekIdx + 1}</div>

@@ -6,7 +6,9 @@ export type Screen =
   | "chat"
   | "history"
   | "profile"
-  | "babyprofile";
+  | "babyprofile"
+  | "auth"
+  | "recovery";
 
 export interface Contact {
   name: string;
@@ -65,7 +67,13 @@ export interface Profile {
   firstTime: boolean;
 }
 
+export interface User {
+  id: string;
+  nickname: string;
+}
+
 export interface Note {
+  id?: string; // set once the note is saved on the server
   key: string; // message content, used as unique key
   text: string;
   topic: string;
