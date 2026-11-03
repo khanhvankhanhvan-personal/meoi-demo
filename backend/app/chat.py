@@ -75,6 +75,23 @@ def _reply(
     )
 
 
+def normalise_history(messages: list[ChatMessage]) -> list[dict[str, str]]:
+    """Make the history valid for the Messages API without altering any user text.
+
+    Drops leading assistant messages (the first must be from the user) and merges consecutive
+    messages of the same role, joined by a blank line. Callers guarantee the last one is a user.
+    """
+    out: list[dict[str, str]] = []
+    for m in messages:
+        if not out and m.role == "assistant":
+            continue
+        if out and out[-1]["role"] == m.role:
+            out[-1]["content"] += "\n\n" + m.content
+        else:
+            out.append({"role": m.role, "content": m.content})
+    return out
+
+
 async def respond(
     req: ChatRequest,
     now: datetime,
@@ -103,7 +120,7 @@ async def respond(
     try:
         raw = await llm.complete(
             build_system_prompt(req.profile, now),
-            [{"role": m.role, "content": m.content} for m in req.messages],
+            normalise_history(req.messages),
         )
     except Exception as exc:  # network, rate limit, API error: never log the request content
         # The HTTP status helps diagnose billing/auth/model problems and holds no user content.
