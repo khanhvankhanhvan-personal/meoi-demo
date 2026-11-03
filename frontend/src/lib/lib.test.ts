@@ -32,9 +32,10 @@ describe("dates", () => {
 
   it("describes baby's age in days, months, then years", () => {
     const now = new Date(2026, 10, 3);
-    expect(ageLabel("2026-10-25", now)).toBe("9 ngày tuổi");
+    expect(ageLabel("2026-10-30", now)).toBe("4 ngày tuổi");
+    expect(ageLabel("2026-10-25", now)).toBe("1 tuần tuổi");
     expect(ageLabel("2026-10-03", now)).toBe("1 tháng tuổi");
-    expect(ageLabel("2026-10-04", now)).toBe("30 ngày tuổi");
+    expect(ageLabel("2026-10-04", now)).toBe("4 tuần tuổi");
     expect(ageLabel("2025-07-31", now)).toBe("15 tháng tuổi");
     expect(ageLabel("2024-11-03", now)).toBe("2 tuổi");
     expect(ageLabel("2024-06-03", now)).toBe("2 tuổi 5 tháng");
