@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { daysInMonth, kf, parseKey } from "../lib/dates";
 
-const ITEM = 44; // px, must match .wheel-item in styles.css
+const ITEM = 40; // px, must match .wheel-item in styles.css
 const SETTLE_MS = 90;
 
 type Item = { value: number; label: string };

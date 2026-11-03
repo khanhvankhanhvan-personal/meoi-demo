@@ -41,10 +41,13 @@ export function monthsOld(birthKey: string, now: Date = new Date()): number {
   return Math.max(0, months);
 }
 
-/** Baby's age the way mothers say it: days under a month, months up to 2 years, then years + months. */
+/** Baby's age the way mothers say it: days under a week, weeks under a month, months up to 2 years, then years + months. */
 export function ageLabel(birthKey: string, now: Date = new Date()): string {
   const months = monthsOld(birthKey, now);
-  if (months < 1) return `${daysSince(birthKey, now)} ngày tuổi`;
+  if (months < 1) {
+    const days = daysSince(birthKey, now);
+    return days >= 7 ? `${Math.floor(days / 7)} tuần tuổi` : `${days} ngày tuổi`;
+  }
   if (months < 24) return `${months} tháng tuổi`;
   const years = Math.floor(months / 12);
   const rest = months % 12;

@@ -1,4 +1,5 @@
 import { AppShell } from "./components/AppShell";
+import { StatusBar } from "./components/StatusBar";
 import { Auth } from "./screens/Auth";
 import { Recovery } from "./screens/Recovery";
 import { Checkin } from "./screens/Checkin";
@@ -52,6 +53,7 @@ export default function App({
       {/* On wide screens the app is drawn inside a phone-shaped frame; on phones it is full-bleed. */}
       <div className="stage">
         <div className="device">
+          <StatusBar />
           <div className="screen">
             <Screens />
           </div>

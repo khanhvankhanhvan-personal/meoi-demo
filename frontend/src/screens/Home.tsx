@@ -1,6 +1,7 @@
 import { Icon } from "../components/Icons";
 import { DEFAULT_TIP, TIPS, TIP_KEY, moodOf } from "../content";
 import { ageLabel, daysSince, kf } from "../lib/dates";
+import { momentLine } from "../lib/greeting";
 import { chipsFor, reflect } from "../lib/opener";
 import { useStore } from "../store";
 
@@ -58,6 +59,7 @@ export function Home() {
         </section>
       )}
       <h1 className="serif greet">Chào mẹ.</h1>
+      <p className="moment">{momentLine()}</p>
       {state.profile && (
         <p className="lead">
           Tính đến hôm nay, con đã được <strong>{ageLabel(state.profile.birth)}</strong> rồi.
@@ -68,6 +70,14 @@ export function Home() {
       <button className="cta" onClick={() => dispatch({ type: "go", screen: "checkin" })}>
         <Icon name="sparkle" />
         {doneToday ? "Cập nhật check-in hôm nay" : "Check-in cảm xúc của mẹ hiện tại"}
+      </button>
+
+      <button className="companion" onClick={() => dispatch({ type: "go", screen: "chat" })}>
+        <span className="avatar" aria-hidden="true">
+          M!
+        </span>
+        <span className="companion-text">Mình ở đây nếu mẹ cần gì nhé</span>
+        <Icon name="chevron" size={18} />
       </button>
 
       {note && (

@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { ageLabel } from "../lib/dates";
 import { useStore } from "../store";
 import type { Screen } from "../types";
 import { Icon, type IconName } from "./Icons";
@@ -26,8 +27,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="shell">
       <header className="topbar">
-        <div className="brand">
-          Mẹ Ơi<span>!</span>
+        <div className="brand-wrap">
+          <div className="brand">
+            Mẹ Ơi<span>!</span>
+          </div>
+          {state.profile && <span className="brand-age">/ {ageLabel(state.profile.birth)}</span>}
         </div>
         <div className="topbar-actions">
           <button
@@ -38,7 +42,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Icon name="user" />
           </button>
           <button className="support-btn" onClick={() => setOpen(true)}>
-            Hỗ trợ
+            <Icon name="pulse" size={18} /> Hỗ trợ
           </button>
         </div>
       </header>
