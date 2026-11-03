@@ -1,0 +1,82 @@
+name: Ship UI change (Lane A)
+
+# Pushing a branch named ui/<something> ships a plain-UI change with no clicks:
+#   push -> open PR -> run CI on the branch -> CI green -> squash-merge -> run CI on main -> Render deploys
+#           -> "Verify deployment" smoke-tests the public site.
+# Only Lane A files may ship this way (scripts/lane-check.sh). Anything else gets a normal PR and waits for a human.
+# Kill switch: set the repository variable AUTO_SHIP to "off" (Settings > Secrets and variables > Actions > Variables).
+# One-time setting: Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests".
+on:
+  push:
+    branches: ["ui/**"]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: ["ui/**"]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  # No automatic shipping from 21:00 on 3 Nov 2026 (ICT) until the defense is over (end of 4 Nov ICT).
+  FREEZE_START: "2026-11-03T14:00:00Z"
+  FREEZE_END: "2026-11-04T17:00:00Z"
+
+jobs:
+  open-pr:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Open the pull request and start CI
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          TITLE=$(git log -1 --format=%s)
+          if [ -z "$(gh pr list --head "$BRANCH" --state open --json number -q '.[0].number')" ]; then
+            gh pr create --base main --head "$BRANCH" --title "$TITLE" \
+              --body "Opened automatically for a \`ui/\` branch. Lane A changes merge by themselves once CI is green; anything else waits for a person. Change request came from the \`/ship\` flow."
+          fi
+          if git diff --name-only origin/main...HEAD | bash scripts/lane-check.sh; then
+            # PRs created with the built-in token do not start CI by themselves, so start it here.
+            gh workflow run ci.yml --ref "$BRANCH"
+          else
+            echo "::notice::Not a pure Lane A change: PR opened for manual review, CI will run on it as usual."
+            gh pr comment "$BRANCH" --body "Not auto-merged: this touches files outside Lane A (see the workflow log). A person must review and merge."
+            gh workflow run ci.yml --ref "$BRANCH"
+          fi
+
+  merge:
+    if: >
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Merge when CI is green and the change is Lane A
+        env:
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          if [ "${{ vars.AUTO_SHIP }}" = "off" ]; then echo "AUTO_SHIP is off: not merging."; exit 0; fi
+          now=$(date -u +%s)
+          if [ "$now" -ge "$(date -u -d "$FREEZE_START" +%s)" ] && [ "$now" -lt "$(date -u -d "$FREEZE_END" +%s)" ]; then
+            echo "::warning::Release freeze: PR left open."; exit 0
+          fi
+          PR=$(gh pr list --head "$BRANCH" --state open --json number,headRefOid -q ".[] | select(.headRefOid==\"$SHA\") | .number")
+          [ -z "$PR" ] && { echo "No open PR at this exact commit (a newer push replaced it)."; exit 0; }
+          git fetch origin main
+          if ! git diff --name-only origin/main...HEAD | bash scripts/lane-check.sh; then
+            echo "::notice::Not Lane A: left for manual merge."; exit 0
+          fi
+          gh pr merge "$PR" --squash --delete-branch
+          # A merge made with the built-in token does not trigger CI on main, which Render and the deploy check wait for.
+          gh workflow run ci.yml --ref main
