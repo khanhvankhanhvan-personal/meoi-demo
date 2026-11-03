@@ -1,0 +1,49 @@
+name: Yêu cầu thay đổi
+description: Mẹ ghi lại điều muốn đổi hoặc điều thấy chưa ổn (mất khoảng 3 phút)
+title: "[Phản hồi] "
+labels: ["phản hồi"]
+body:
+  - type: dropdown
+    id: screen
+    attributes:
+      label: Màn hình nào?
+      options:
+        - Giới thiệu
+        - Nhập thông tin ban đầu
+        - Trang chủ
+        - Check-in
+        - Trò chuyện
+        - Lịch sử / Ghi chú
+        - Hồ sơ của mẹ / Hồ sơ con
+        - Nút Hỗ trợ / số điện thoại
+        - Không thuộc màn hình nào
+    validations:
+      required: true
+  - type: textarea
+    id: seen
+    attributes:
+      label: Mẹ thấy gì?
+      description: Mô tả ngắn điều đang xảy ra. Có thể dán ảnh chụp màn hình vào đây.
+    validations:
+      required: true
+  - type: textarea
+    id: want
+    attributes:
+      label: Mẹ muốn nó như thế nào?
+      description: Nếu chưa biết, cứ để trống, mình sẽ đề xuất.
+  - type: dropdown
+    id: safety
+    attributes:
+      label: Có liên quan đến an toàn hoặc nội dung y tế không?
+      description: Ví dụ câu trả lời của chatbot, câu cảnh báo, số điện thoại, từ khoá báo động.
+      options:
+        - Không
+        - Có
+        - Không chắc
+    validations:
+      required: true
+  - type: textarea
+    id: phrase
+    attributes:
+      label: Câu nói thật của mẹ bỉm (nếu có)
+      description: Một câu mà mẹ nghĩ chatbot phải nhận ra là nguy hiểm, hoặc không nên báo động nhầm. Mình sẽ thêm vào bộ câu an toàn vàng.

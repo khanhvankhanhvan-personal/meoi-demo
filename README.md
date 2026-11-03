@@ -37,13 +37,21 @@ Hotline data lives in docs/content-framework-v2-vi.md (section 2) with a per-row
    reviewed by a medical professional.
 3. Mother's check-in reflection (`reflectOnCheckins`) is rule-based, not model-generated.
 4. Ngày Mai hotline phone number and 111 / CSAGA / Ngôi nhà Bình yên numbers are not re-verified (see docs).
-5. The 7 tier test cases (docs/system-prompt-v2-vi.md, section 3) were run once on 2026-10-30 (claude-haiku-5-5);
-   the reports await Vân's judgement (`backend/evals/out/`). The small beta has not been run.
+5. The 7 tier test cases (docs/system-prompt-v2-vi.md, section 3) were run once per mode on 2026-10-30
+   (claude-haiku-5-5) and judged passing by Vân. The small beta has not been run.
+6. The safety keyword layer has 15 known gaps (`known_gaps` in `backend/tests/data/safety_golden.json`); adding
+   keywords needs Vân's approval. See `docs/process/quy-trinh-cai-tien.md`.
 
 ## How to view the prototype
 
 Open `src/meoi-prototype.jsx` as an artifact in Claude.ai (paste the file into a conversation and ask Claude
 to render it as an artifact). No build step required.
+
+## How we improve the product
+
+`docs/process/quy-trinh-cai-tien.md` (Vietnamese) describes the change flow: three lanes by risk (UI / behaviour /
+safety and content), the weekly rhythm, the gates and a prioritised backlog. Feedback goes through the GitHub issue
+form "Yêu cầu thay đổi"; pull requests use the checklist in `.github/pull_request_template.md`.
 
 ## Run and test locally
 
