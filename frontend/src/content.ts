@@ -213,9 +213,9 @@ export const WELCOME = {
   cardTitle: "Một góc an yên dành riêng cho mẹ",
   cardBody: "Mẹ không cần gồng mình để luôn hoàn hảo. Mọi bối rối, mệt mỏi hay cảm xúc tủi thân đều có thể trút ra ở đây.",
   bullets: [
-    "Luôn có mặt bất kể khi nào — nhất là những cữ đêm 2h sáng",
-    "Lắng nghe không giáo điều, không phán xét",
-    "Thấu hiểu từng hoàn cảnh sinh, cữ sữa và sức khỏe của mẹ",
+    "Lắng nghe để hiểu rõ tình hình của mẹ nhất",
+    "Đồng hành giúp mẹ xác định giải pháp cho mọi vấn đề làm mẹ bận tâm",
+    "Luôn có mặt bất kể khi nào",
   ],
 };
 
