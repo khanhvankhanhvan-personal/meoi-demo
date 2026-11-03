@@ -30,3 +30,23 @@ export function birthDateError(key: string, now: Date = new Date()): string | nu
 
 export const weeksOld = (birthKey: string, now: Date = new Date()): number =>
   Math.floor(daysSince(birthKey, now) / 7);
+
+export const daysInMonth = (year: number, month: number): number => new Date(year, month, 0).getDate();
+
+/** Whole calendar months since a "YYYY-MM-DD" birth date (never negative). */
+export function monthsOld(birthKey: string, now: Date = new Date()): number {
+  const b = parseKey(birthKey);
+  let months = (now.getFullYear() - b.getFullYear()) * 12 + (now.getMonth() - b.getMonth());
+  if (now.getDate() < b.getDate()) months -= 1;
+  return Math.max(0, months);
+}
+
+/** Baby's age the way mothers say it: days under a month, months up to 2 years, then years + months. */
+export function ageLabel(birthKey: string, now: Date = new Date()): string {
+  const months = monthsOld(birthKey, now);
+  if (months < 1) return `${daysSince(birthKey, now)} ngày tuổi`;
+  if (months < 24) return `${months} tháng tuổi`;
+  const years = Math.floor(months / 12);
+  const rest = months % 12;
+  return rest ? `${years} tuổi ${rest} tháng` : `${years} tuổi`;
+}
