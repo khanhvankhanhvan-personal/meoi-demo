@@ -1,7 +1,8 @@
 import { Choice } from "../components/Chips";
 import { SupportList } from "../components/SupportList";
 import { FEED_FORMULA, FEED_METHOD } from "../content";
-import { birthDateError, kf, weeksOld } from "../lib/dates";
+import { WheelDatePicker } from "../components/WheelDatePicker";
+import { ageLabel, birthDateError } from "../lib/dates";
 import { emptyBaby, useStore } from "../store";
 import type { Baby } from "../types";
 
@@ -25,16 +26,15 @@ export function Profile() {
             value={p.birthType}
             onChange={(v) => v && dispatch({ type: "setProfile", profile: { birthType: v } })}
           />
-          <label className="field">
+          <div className="field">
             <span className="small muted">Ngày sinh của bé</span>
-            <input
-              type="date"
+            <WheelDatePicker
+              label="Ngày sinh của bé"
               value={p.birth}
-              max={kf(new Date())}
-              onChange={(e) => e.target.value && dispatch({ type: "setProfile", profile: { birth: e.target.value } })}
+              onChange={(birth) => dispatch({ type: "setProfile", profile: { birth } })}
             />
-          </label>
-          {err ? <p className="error">{err}</p> : <p className="muted small">Con khoảng {weeksOld(p.birth)} tuần tuổi.</p>}
+          </div>
+          {err ? <p className="error">{err}</p> : <p className="muted small">Con khoảng {ageLabel(p.birth)}.</p>}
           <h3>Lần sinh</h3>
           <Choice
             legend="Lần sinh"
@@ -89,7 +89,7 @@ export function BabyProfile() {
   return (
     <div className="page">
       <h1 className="serif">Hồ sơ con</h1>
-      {state.profile && <p className="muted">Bé khoảng {weeksOld(state.profile.birth)} tuần tuổi.</p>}
+      {state.profile && <p className="muted">Bé khoảng {ageLabel(state.profile.birth)}.</p>}
       <div className="stepper">
         <button aria-label="Bớt một bé" disabled={babies.length <= 1} onClick={() => set(babies.slice(0, -1))}>
           −

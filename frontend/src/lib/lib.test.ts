@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { birthDateError, daysSince, kf, vf, weeksOld } from "./dates";
+import { ageLabel, birthDateError, daysSince, kf, monthsOld, vf, weeksOld } from "./dates";
 import { mkOpener, reflect, chipsFor } from "./opener";
 import type { CheckinRecord } from "../types";
 
@@ -25,6 +25,17 @@ describe("dates", () => {
     expect(daysSince("2026-09-21", now)).toBe(42);
     expect(weeksOld("2026-09-21", now)).toBe(6);
     expect(daysSince("2026-12-01", now)).toBe(0);
+  });
+
+  it("describes baby's age in days, months, then years", () => {
+    const now = new Date(2026, 10, 3);
+    expect(ageLabel("2026-10-25", now)).toBe("9 ngày tuổi");
+    expect(ageLabel("2026-10-03", now)).toBe("1 tháng tuổi");
+    expect(ageLabel("2026-10-04", now)).toBe("30 ngày tuổi");
+    expect(ageLabel("2025-07-31", now)).toBe("15 tháng tuổi");
+    expect(ageLabel("2024-11-03", now)).toBe("2 tuổi");
+    expect(ageLabel("2024-06-03", now)).toBe("2 tuổi 5 tháng");
+    expect(monthsOld("2026-11-30", now)).toBe(0);
   });
 
   it("rejects future dates and dates older than 3 years", () => {

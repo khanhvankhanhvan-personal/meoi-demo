@@ -11,6 +11,7 @@
   --danger: #b3261e;
   --danger-surface: #f2c9c5;
   --radius: 16px;
+  --item: 44px; /* wheel row height; keep in sync with ITEM in WheelDatePicker.tsx */
 }
 
 * { box-sizing: border-box; }
@@ -49,10 +50,25 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .onboarding, .intake { padding: 24px 22px 40px; display: flex; flex-direction: column; gap: 6px; }
 .skip { align-self: flex-end; }
 
-.btn { border: 1px solid #d9dde0; background: #fff; border-radius: 999px; padding: 12px 20px; font-weight: 600; }
+.btn { border: 1px solid #d9dde0; background: #fff; border-radius: 999px; min-height: 48px; padding: 0 22px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.08s, background 0.15s; }
 .btn.primary { background: var(--pink); border-color: var(--pink); color: #fff; margin-top: 16px; }
 .btn.primary:hover:not(:disabled) { background: var(--pink-hover); }
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:focus-visible, .wheel:focus-visible { outline: 3px solid var(--pink-light); outline-offset: 2px; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+/* Button rows: same height, aligned, "back" narrower than the main action */
+.actions { display: flex; gap: 12px; margin-top: 24px; }
+.actions .btn { flex: 1; margin-top: 0; }
+.actions .btn.primary { flex: 2; margin-top: 0; }
+.row > .btn.primary { margin-top: 0; }
+
+/* Date wheel */
+.wheel-picker { position: relative; display: grid; grid-template-columns: 1fr 1.5fr 1.2fr; height: calc(var(--item) * 5); margin: 14px 0; border: 1px solid #d9dde0; border-radius: var(--radius); background: #fff; overflow: hidden; }
+.wheel-band { position: absolute; left: 6px; right: 6px; top: calc(var(--item) * 2); height: var(--item); background: var(--pink-light); border-radius: 12px; }
+.wheel { position: relative; z-index: 1; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; padding: calc(var(--item) * 2) 0; scrollbar-width: none; overscroll-behavior: contain; -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent); mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent); }
+.wheel::-webkit-scrollbar { display: none; }
+.wheel-item { height: var(--item); display: flex; align-items: center; justify-content: center; scroll-snap-align: center; color: var(--text-2); cursor: pointer; user-select: none; }
+.wheel-item.on { color: var(--pink); font-weight: 700; font-size: 17px; }
 .link { background: none; border: 0; color: var(--pink); padding: 6px 0; font-weight: 600; text-align: left; }
 .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .row.between { justify-content: space-between; }
@@ -143,3 +159,16 @@ blockquote { margin: 8px 0 0; padding-left: 12px; border-left: 3px solid var(--p
 .tab-home { width: 58px; height: 58px; border-radius: 50%; background: var(--pink); color: #fff; justify-content: center; margin-top: -24px; box-shadow: 0 4px 12px rgba(200, 30, 92, 0.4); }
 .tab-home.active { color: #fff; border: 3px solid rgba(255, 255, 255, 0.9); }
 .tab-home .tab-label { font-size: 10px; }
+
+/* Phone-like frame: only on wide screens; on a real phone the app is full-bleed */
+.stage, .device, .screen { height: 100%; }
+@media (min-width: 521px) and (min-height: 640px) {
+  body { background: radial-gradient(circle at 50% 30%, #f7e9ee, #e4e7ea 70%); }
+  .stage { display: flex; align-items: center; justify-content: center; padding: 24px 0; }
+  .device { position: relative; width: 390px; height: min(844px, 100%); border: 12px solid #1f1d20; border-radius: 48px; background: #1f1d20; box-shadow: 0 30px 70px rgba(45, 42, 46, 0.35), 0 0 0 2px #3a373c; }
+  .device::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 110px; height: 26px; border-radius: 0 0 16px 16px; background: #1f1d20; z-index: 40; }
+  /* transform keeps the fixed-position support sheet inside the frame */
+  .screen { position: relative; height: 100%; border-radius: 36px; overflow-x: hidden; overflow-y: auto; background: #fff; padding-top: 28px; transform: translateZ(0); scrollbar-width: none; }
+  .screen::-webkit-scrollbar { display: none; }
+  .shell, .page.onboarding, .page.intake { box-shadow: none; max-width: none; }
+}
