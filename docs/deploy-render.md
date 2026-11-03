@@ -44,7 +44,8 @@ Gửi mình địa chỉ công khai. Mình sẽ chạy kiểm tra từ bên ngo�
 ## Lưu ý quan trọng
 - **Ngủ vẫn có thể xảy ra** khi Render khởi động lại hoặc đang deploy. Trước buổi bảo vệ (4/11), mẹ mở địa chỉ trước ~5 phút
   để chắc chắn app đã thức. Phương án dự phòng vẫn là bản Artifact của prototype.
-- **Chưa có database**: dữ liệu của mẹ chỉ nằm trong trình duyệt, tải lại trang là mất (giống bản local). Cơ sở dữ liệu
-  và đăng nhập thuộc M5. Database miễn phí của Render **bị xoá sau 30 ngày**, nên không phù hợp để lưu dữ liệu lâu dài.
+- **Đăng nhập và database (M5)**: sau khi merge, vào Render > Blueprints > meoi > **Sync** để tạo database `meoi-db` và hai biến
+  mới (`DATABASE_URL`, `JWT_SECRET`). Trước khi sync, app vẫn chạy bình thường ở chế độ khách. Database miễn phí của Render
+  **bị xoá sau 30 ngày** kể từ lúc tạo (có thêm 14 ngày để nâng cấp): đặt lịch nhắc, xem ADR-006.
 - Mỗi lần deploy thành công, bước kiểm tra tự gửi **một** tin nhắn thật tới Claude (chi phí khoảng vài phần trăm xu).
 - Nhớ đặt **hạn mức chi tiêu hằng tháng** trong console.anthropic.com.

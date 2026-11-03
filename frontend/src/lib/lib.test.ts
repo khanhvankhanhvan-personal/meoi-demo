@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { ageLabel, birthDateError, daysSince, kf, monthsOld, vf, weeksOld } from "./dates";
 import { mkOpener, reflect, chipsFor } from "./opener";
+import { canon } from "../content";
+import { categorize, filterCheckins, insight } from "./diary";
 import type { CheckinRecord } from "../types";
 
 const rec = (over: Partial<CheckinRecord> = {}): CheckinRecord => ({
@@ -53,7 +55,7 @@ describe("mkOpener", () => {
       rec({ moods: ["Mệt", "Quá tải"], stressors: ["Con quấy khóc, mất ngủ", "Cho con bú", "Cô đơn, không ai hỏi han"] }),
     );
     expect(m.content).toBe(
-      "Mình đây, mẹ ạ. Hôm nay mẹ mệt và quá tải và đang nặng lòng vì con quấy khóc, mất ngủ và cho con bú — mẹ muốn kể mình nghe thêm không?",
+      "Mình đây, mẹ ạ. Hôm nay mẹ thấy kiệt sức và quá tải và đang nặng lòng vì con quấy khóc, mất ngủ và cho con bú — mẹ muốn kể mình nghe thêm không?",
     );
     expect(m.tier).toBe("1");
     expect(m.suggestions).toHaveLength(3);
@@ -85,5 +87,44 @@ describe("reflect", () => {
 
   it("otherwise just thanks the mother", () => {
     expect(reflect([rec({ moods: ["Ổn"] })])).toMatch(/1 lần check-in gần đây/);
+  });
+});
+
+describe("diary helpers", () => {
+  const now = new Date(2026, 10, 3, 12);
+  const day = (key: string, moods: string[], over: Partial<CheckinRecord> = {}) => rec({ key, moods, ...over });
+
+  it("maps pre-redesign names to the new ones", () => {
+    expect(canon("Mệt")).toBe("Kiệt sức");
+    expect(canon("Ngủ ít")).toBe("Tạm ổn");
+    expect(canon("Bình yên")).toBe("Bình yên");
+  });
+
+  it("categorises pinned tips, medical first, comfort by default", () => {
+    expect(categorize("Chườm ấm nhẹ nhàng trước khi cho bú")).toBe("yte");
+    expect(categorize("Sữa mẹ thường biến thiên nhiều")).toBe("dinhduong");
+    expect(categorize("Khi bé gắt ngủ lúc đêm muộn, mẹ thử quấn kén")).toBe("be");
+    expect(categorize("Mẹ đừng tự trách mình nhé")).toBe("vove");
+  });
+
+  it("summarises the last 7 days without concluding anything medical", () => {
+    const list = [
+      day("2026-11-03", ["Kiệt sức"], { sleep: "Đứt quãng", bodies: ["Mỏi cổ vai gáy", "Mệt rã rời, uể oải"] }),
+      day("2026-11-02", ["Bình yên"], { bodies: ["Mỏi cổ vai gáy"] }),
+      day("2026-10-01", ["Quá tải"]), // outside the window
+    ];
+    const s = insight(list, now);
+    expect(s).toMatchObject({ title: "Cần nghỉ ngơi", tiredDays: 1, okDays: 1 });
+    expect(s?.sleep?.label).toBe("Đứt quãng");
+    expect(s?.bodies[0]).toBe("Mỏi cổ vai gáy");
+    expect(insight([day("2026-10-01", ["Quá tải"])], now)).toBeNull();
+  });
+
+  it("filters by time and mood, newest first", () => {
+    const list = [day("2026-10-20", ["Bình yên"]), day("2026-11-02", ["Kiệt sức"]), day("2026-09-01", ["Ổn"])];
+    expect(filterCheckins(list, "all", "any", now).map((c) => c.key)).toEqual(["2026-11-02", "2026-10-20", "2026-09-01"]);
+    expect(filterCheckins(list, "30", "any", now)).toHaveLength(2);
+    expect(filterCheckins(list, "7", "ok", now)).toHaveLength(0);
+    expect(filterCheckins(list, "all", "ok", now).map((c) => c.key)).toEqual(["2026-10-20", "2026-09-01"]);
   });
 });

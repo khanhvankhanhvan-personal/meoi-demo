@@ -37,4 +37,23 @@ case "$code" in
   *) fail "normal chat returned HTTP $code" ;;
 esac
 
+if [ "${SMOKE_ACCOUNTS:-0}" = "1" ]; then
+  echo "accounts: sign up, read profile, delete (needs the database)"
+  jar=$(mktemp); nick="smoke$(date +%s)$RANDOM"
+  api() {  # $1 = method, $2 = path, $3 = JSON body (optional); prints the HTTP status, body in /tmp/smoke.out
+    if [ -n "${3-}" ]; then
+      printf '%s' "$3" | curl -sS -o /tmp/smoke.out -w '%{http_code}' -b "$jar" -c "$jar" -X "$1"         "$BASE/api$2" -H 'Content-Type: application/json' --data-binary @-
+    else
+      curl -sS -o /tmp/smoke.out -w '%{http_code}' -b "$jar" -c "$jar" -X "$1" "$BASE/api$2"
+    fi
+  }
+  [ "$(api POST /auth/register "{\"nickname\":\"$nick\",\"pin\":\"123456\"}")" = "201" ] || fail "register"
+  grep -q '"recovery_code"' /tmp/smoke.out || fail "register did not return a recovery code"
+  [ "$(api GET /auth/me)" = "200" ] || fail "/auth/me after register"
+  [ "$(api GET /profile)" = "200" ] || fail "/profile"
+  [ "$(api DELETE /account "{\"pin\":\"123456\"}")" = "204" ] || fail "delete account"
+  [ "$(api GET /auth/me)" = "401" ] || fail "session must end after deleting the account"
+  rm -f "$jar"
+fi
+
 echo "OK"

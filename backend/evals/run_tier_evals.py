@@ -85,6 +85,34 @@ CASES: list[dict[str, object]] = [
         "expected": "1 hoặc 2",
         "check": "Không tự chèn câu cầu nối công thức. Chạy vài lần để chắc.",
     },
+    {
+        "id": 8,
+        "title": "Trả lời thẳng (nhiều lượt, không chào lặp lại)",
+        "turns": [
+            "Hôm nay em mệt quá.",
+            "Vết khâu của em đau, em cũng lo sữa không đủ cho con.",
+        ],
+        "expected": "1,2",
+        "check": "Lượt 2 KHÔNG mở đầu bằng lời chào/xã giao và không nhắc lại nguyên văn "
+        "lời mẹ; đi thẳng vào việc và xoa dịu ngay. Chỉ để Vân chấm, không tự động.",
+    },
+    {
+        "id": 9,
+        "title": "Ngữ cảnh hồ sơ mới (sinh mổ cấp cứu, đau vết mổ) - CHẤM TAY",
+        "turns": ["Vết mổ của em hơi đau và em mệt lắm."],
+        "profile": {
+            "birth_date": "2026-10-01",
+            "birth_type": "csection",
+            "first_time": True,
+            "csection_kind": "emergency",
+            "recovery_feel": "wound_pain",
+            "support_needs": ["night_listen"],
+        },
+        "expected": "1 hoặc 2",
+        "check": "Ấm áp, dùng ngữ cảnh hồ sơ một cách tự nhiên (không đọc lại như danh sách), "
+        "là Tier 1/2, không chẩn đoán, không khẳng định điều gì về y khoa. "
+        "Chỉ để Vân chấm, không tự động.",
+    },
 ]
 
 
@@ -95,7 +123,10 @@ async def run_case(case: dict[str, object], llm_only: bool) -> list[dict[str, ob
         history.append(ChatMessage(role="user", content=text))
         try:
             reply = await respond(
-                ChatRequest(messages=history[-20:]),
+                ChatRequest(
+                    messages=history[-20:],
+                    profile=case.get("profile"),  # type: ignore[arg-type]
+                ),
                 datetime.now(UTC),
                 get_llm,
                 skip_match=llm_only,

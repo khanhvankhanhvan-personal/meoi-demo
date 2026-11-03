@@ -1,42 +1,45 @@
-import { useState } from "react";
-import { ONBOARDING } from "../content";
+import { Icon } from "../components/Icons";
+import { Progress, Screen, StepBar } from "../components/OnboardingParts";
+import { WELCOME } from "../content";
 import { useStore } from "../store";
 
+/** Step 1 of 5: a warm welcome. Steps 2-5 are in Intake. */
 export function Onboarding() {
   const { dispatch } = useStore();
-  const [i, setI] = useState(0);
-  const slide = ONBOARDING[i];
-  const last = i === ONBOARDING.length - 1;
-  const start = () => dispatch({ type: "go", screen: "intake" });
+  const next = () => dispatch({ type: "go", screen: "intake" });
+  // "Bỏ qua" leaves onboarding; the mother can fill her details later from the home screen.
+  const skip = () => dispatch({ type: "go", screen: "home" });
 
   return (
-    <div className="page onboarding">
-      <button className="link skip" onClick={start}>
-        Bỏ qua
-      </button>
-      <div className="brand big">
-        Mẹ Ơi<span>!</span>
+    <Screen>
+      <Progress step={1} onSkip={skip} />
+      <div className="ob-body">
+        <span className="ob-tile big" aria-hidden="true">
+          <Icon name="heart" size={30} filled />
+        </span>
+        <h1 className="serif">
+          Chào mẹ, mình là Mẹ Ơi<span className="bang">!</span>
+        </h1>
+        <p className="lead">{WELCOME.lead}</p>
+        <section className="card welcome-card">
+          <div className="welcome-title">
+            <span className="avatar-sm" aria-hidden="true">
+              <Icon name="sparkle" size={16} />
+            </span>
+            <strong>{WELCOME.cardTitle}</strong>
+          </div>
+          <p className="muted">{WELCOME.cardBody}</p>
+          <ul className="bullets">
+            {WELCOME.bullets.map((b) => (
+              <li key={b}>{b}</li>
+            ))}
+          </ul>
+        </section>
+        <button className="link" onClick={() => dispatch({ type: "go", screen: "auth" })}>
+          Mình đã có tài khoản
+        </button>
       </div>
-      <h1 className="serif">{slide.title}</h1>
-      <p className="lead">{slide.body}</p>
-      {"sources" in slide && slide.sources && (
-        <ul className="sources">
-          {slide.sources.map((s) => (
-            <li key={s.n}>
-              <strong>{s.n}</strong>
-              <span className="muted small">{s.d}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="dots" aria-hidden="true">
-        {ONBOARDING.map((_, k) => (
-          <span key={k} className={k === i ? "dot on" : "dot"} />
-        ))}
-      </div>
-      <button className="btn primary" onClick={last ? start : () => setI(i + 1)}>
-        {last ? "Bắt đầu" : "Tiếp tục"}
-      </button>
-    </div>
+      <StepBar onNext={next} nextLabel="Làm quen cùng Mẹ Ơi!" />
+    </Screen>
   );
 }

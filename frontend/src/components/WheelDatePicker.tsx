@@ -104,7 +104,7 @@ export function WheelDatePicker({
   const years: Item[] = [];
   for (let yy = min.getFullYear(); yy <= max.getFullYear(); yy++) years.push({ value: yy, label: String(yy) });
   const months: Item[] = Array.from({ length: 12 }, (_, k) => ({ value: k + 1, label: `Tháng ${k + 1}` }));
-  const days: Item[] = Array.from({ length: daysInMonth(y, m) }, (_, k) => ({ value: k + 1, label: String(k + 1) }));
+  const days: Item[] = Array.from({ length: daysInMonth(y, m) }, (_, k) => ({ value: k + 1, label: `Ngày ${k + 1}` }));
 
   return (
     <div className="wheel-picker" role="group" aria-label={label}>

@@ -17,6 +17,17 @@ jobs:
   backend:
     name: Backend (ruff, mypy, pytest)
     runs-on: ubuntu-latest
+    services:
+      postgres: # the account tests also run against a real Postgres (same migrations as production)
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: meoi_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://postgres:test@localhost:5432/meoi_test
     defaults:
       run:
         working-directory: backend
@@ -64,7 +75,7 @@ jobs:
       - name: Build images and start the stack
         run: docker compose up -d --build --wait --wait-timeout 240
       - name: Smoke test
-        run: bash scripts/compose-smoke.sh
+        run: SMOKE_ACCOUNTS=1 bash scripts/compose-smoke.sh
       - name: Show logs on failure
         if: failure()
         run: docker compose logs --no-color --tail 100
