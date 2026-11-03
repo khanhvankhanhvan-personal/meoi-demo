@@ -50,6 +50,7 @@ export interface CheckinRecord {
   sleep: string | null;
   bodies: string[];
   stressors: string[];
+  note?: string; // private free text from the check-in sheet
 }
 
 export type Formula = "mom" | "only" | "mix";

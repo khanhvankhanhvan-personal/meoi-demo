@@ -16,6 +16,9 @@ export function Profile() {
     <div className="page">
       <h1 className="serif">Hồ sơ của mẹ</h1>
       <AccountCard />
+      <button className="card link-card" onClick={() => dispatch({ type: "go", screen: "babyprofile" })}>
+        <span aria-hidden="true">👶</span> Hồ sơ con <span className="muted small">Cách nuôi, số bé</span>
+      </button>
       {p && (
         <section className="card">
           <h3>Cách sinh</h3>

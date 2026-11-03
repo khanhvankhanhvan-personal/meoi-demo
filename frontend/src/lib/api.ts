@@ -109,6 +109,7 @@ interface ServerCheckin {
   sleep: string | null;
   bodies: string[];
   stressors: string[];
+  note?: string | null;
 }
 interface ServerProfile {
   profile: { birth_date: string; birth_type: "normal" | "csection"; first_time: boolean } | null;
@@ -171,6 +172,7 @@ export const httpApi: Api = {
       sleep: r.sleep,
       bodies: r.bodies,
       stressors: r.stressors,
+      ...(r.note ? { note: r.note } : {}),
     }));
     const notes = (await json<ServerNote[]>(n)).map<Note>((r) => ({
       id: r.id,
@@ -206,7 +208,13 @@ export const httpApi: Api = {
     const res = await call(`/checkins/${r.key}`, {
       method: "PUT",
       headers: JSON_HEADERS,
-      body: JSON.stringify({ moods: r.moods, sleep: r.sleep, bodies: r.bodies, stressors: r.stressors }),
+      body: JSON.stringify({
+        moods: r.moods,
+        sleep: r.sleep,
+        bodies: r.bodies,
+        stressors: r.stressors,
+        note: r.note ?? null,
+      }),
     });
     if (!res.ok) throw await failure(res);
   },

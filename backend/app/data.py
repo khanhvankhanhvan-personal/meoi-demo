@@ -114,6 +114,7 @@ class CheckinIO(BaseModel):
     sleep: str | None = Field(default=None, max_length=40)
     bodies: list[Annotated[str, Field(max_length=60)]] = Field(max_length=12)
     stressors: list[Annotated[str, Field(max_length=60)]] = Field(max_length=12)
+    note: str | None = Field(default=None, max_length=500)  # private text; never logged
 
 
 class CheckinOut(CheckinIO):
@@ -124,7 +125,14 @@ class CheckinOut(CheckinIO):
 def list_checkins(user: CurrentUser, db: DB) -> list[CheckinOut]:
     rows = db.scalars(select(Checkin).where(Checkin.user_id == user.id).order_by(Checkin.day)).all()
     return [
-        CheckinOut(day=c.day, moods=c.moods, sleep=c.sleep, bodies=c.bodies, stressors=c.stressors)
+        CheckinOut(
+            day=c.day,
+            moods=c.moods,
+            sleep=c.sleep,
+            bodies=c.bodies,
+            stressors=c.stressors,
+            note=c.note,
+        )
         for c in rows
     ]
 
@@ -136,11 +144,12 @@ def put_checkin(day: date, body: CheckinIO, user: CurrentUser, db: DB) -> Checki
         raise HTTPException(422, "day is in the future")
     row = db.scalar(select(Checkin).where(Checkin.user_id == user.id, Checkin.day == day))
     row = row or Checkin(user_id=user.id, day=day)
-    row.moods, row.sleep, row.bodies, row.stressors = (
+    row.moods, row.sleep, row.bodies, row.stressors, row.note = (
         body.moods,
         body.sleep,
         body.bodies,
         body.stressors,
+        body.note,
     )
     db.add(row)
     db.commit()

@@ -1,20 +1,27 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useStore } from "../store";
 import type { Screen } from "../types";
+import { Icon, type IconName } from "./Icons";
 import { SupportList } from "./SupportList";
 
-const TABS: { screen: Screen; label: string; icon: string }[] = [
-  { screen: "history", label: "Lịch sử", icon: "📅" },
-  { screen: "chat", label: "Trò chuyện", icon: "💬" },
-  { screen: "home", label: "Trang chủ", icon: "🏠" },
-  { screen: "babyprofile", label: "Hồ sơ con", icon: "👶" },
-  { screen: "profile", label: "Hồ sơ", icon: "👤" },
+const TABS: { screen: Screen; label: string; icon: IconName }[] = [
+  { screen: "home", label: "Trang chủ", icon: "home" },
+  { screen: "chat", label: "Tâm sự", icon: "chat" },
+  { screen: "history", label: "Nhật ký & Đã lưu", icon: "bookmark" },
 ];
 
-/** Header with an always-available "Hỗ trợ" button, plus the bottom navigation. */
+/** Header with an always-available "Hỗ trợ" button, the profile shortcut, and the bottom navigation. */
 export function AppShell({ children }: { children: ReactNode }) {
   const { state, dispatch } = useStore();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!state.toast) return;
+    const t = setTimeout(() => dispatch({ type: "clearToast" }), 2200);
+    return () => clearTimeout(t);
+  }, [state.toast, dispatch]);
+
+  const inProfile = state.screen === "profile" || state.screen === "babyprofile";
 
   return (
     <div className="shell">
@@ -22,25 +29,51 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="brand">
           Mẹ Ơi<span>!</span>
         </div>
-        <button className="support-btn" onClick={() => setOpen(true)}>
-          Hỗ trợ
-        </button>
+        <div className="topbar-actions">
+          <button
+            className={`icon-btn${inProfile ? " on" : ""}`}
+            aria-label="Hồ sơ của mẹ"
+            onClick={() => dispatch({ type: "go", screen: "profile" })}
+          >
+            <Icon name="user" />
+          </button>
+          <button className="support-btn" onClick={() => setOpen(true)}>
+            Hỗ trợ
+          </button>
+        </div>
       </header>
 
       <main className="content">{children}</main>
 
+      {state.toast && (
+        <div className="toast" role="status">
+          <Icon name="bookmark" filled size={16} />
+          {state.toast}
+        </div>
+      )}
+
       <nav className="tabs" aria-label="Điều hướng">
-        {TABS.map((t) => (
-          <button
-            key={t.screen}
-            className={`tab${t.screen === "home" ? " tab-home" : ""}${state.screen === t.screen ? " active" : ""}`}
-            aria-current={state.screen === t.screen ? "page" : undefined}
-            onClick={() => dispatch({ type: "go", screen: t.screen })}
-          >
-            <span aria-hidden="true">{t.icon}</span>
-            <span className="tab-label">{t.label}</span>
-          </button>
-        ))}
+        {TABS.map((t) => {
+          const active = state.screen === t.screen || (t.screen === "home" && state.screen === "checkin");
+          return (
+            <button
+              key={t.screen}
+              className={`tab${active ? " active" : ""}`}
+              aria-current={active ? "page" : undefined}
+              onClick={() => dispatch({ type: "go", screen: t.screen })}
+            >
+              <span className="tab-icon">
+                <Icon name={t.icon} filled={active && t.icon === "bookmark"} />
+                {t.screen === "history" && state.notes.length > 0 && (
+                  <span className="badge" aria-label={`${state.notes.length} mục đã ghim`}>
+                    {state.notes.length}
+                  </span>
+                )}
+              </span>
+              <span className="tab-label">{t.label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       {open && (

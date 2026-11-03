@@ -28,7 +28,7 @@ function Screens() {
   }
   return (
     <AppShell>
-      {state.screen === "home" && <Home />}
+      {(state.screen === "home" || state.screen === "checkin") && <Home />}
       {state.screen === "checkin" && <Checkin />}
       {state.screen === "chat" && <Chat />}
       {state.screen === "history" && <History />}

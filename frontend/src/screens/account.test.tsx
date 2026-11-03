@@ -105,11 +105,11 @@ describe("saving to the account", () => {
     const user = userEvent.setup();
     const api = mockApi();
     render(<App api={api} initial={signedIn()} />);
-    await user.click(screen.getByRole("button", { name: "Check-in 1 phút →" }));
-    await user.click(screen.getByRole("button", { name: "Mệt" }));
-    await user.click(screen.getByRole("button", { name: "Lưu check-in" }));
+    await user.click(screen.getByRole("button", { name: "Check-in cảm xúc của mẹ hiện tại" }));
+    await user.click(screen.getByRole("button", { name: /Kiệt sức/ }));
+    await user.click(screen.getByRole("button", { name: "Lưu check-in này" }));
     await waitFor(() => expect(api.saveCheckin).toHaveBeenCalledTimes(1));
-    expect(api.saveCheckin.mock.calls[0][0].moods).toEqual(["Mệt"]);
+    expect(api.saveCheckin.mock.calls[0][0].moods).toEqual(["Kiệt sức"]);
   });
 
   it("saves a pinned note, and removes it from the account when un-pinned", async () => {
@@ -148,9 +148,9 @@ describe("saving to the account", () => {
     const user = userEvent.setup();
     const api = mockApi();
     render(<App api={api} initial={inApp({ screen: "home" })} />);
-    await user.click(screen.getByRole("button", { name: "Check-in 1 phút →" }));
-    await user.click(screen.getByRole("button", { name: "Mệt" }));
-    await user.click(screen.getByRole("button", { name: "Lưu check-in" }));
+    await user.click(screen.getByRole("button", { name: "Check-in cảm xúc của mẹ hiện tại" }));
+    await user.click(screen.getByRole("button", { name: /Kiệt sức/ }));
+    await user.click(screen.getByRole("button", { name: "Lưu check-in này" }));
     await new Promise((r) => setTimeout(r, 700));
     expect(api.saveCheckin).not.toHaveBeenCalled();
     expect(api.saveProfile).not.toHaveBeenCalled();

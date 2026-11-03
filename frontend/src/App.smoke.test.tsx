@@ -52,16 +52,17 @@ describe("smoke: intake -> check-in -> chat", () => {
     await user.click(screen.getByRole("button", { name: "Đúng rồi, đây là em bé đầu tiên của mình" }));
     await user.click(screen.getByRole("button", { name: "Xong" }));
 
-    // home: hero for week 7, then a detailed check-in
-    expect(screen.getByText("Tuần 7")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Check-in 1 phút →" }));
-    expect(screen.getByRole("button", { name: "Lưu check-in" })).toBeDisabled();
-    await user.click(screen.getByRole("button", { name: "Mệt" }));
+    // home, then the check-in sheet
+    expect(screen.getByText("Chào mẹ.")).toBeInTheDocument();
+    expect(screen.getByText(/khoảng 1 tháng tuổi|1 tháng tuổi/)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Check-in cảm xúc của mẹ hiện tại" }));
+    expect(screen.getByRole("button", { name: "Lưu check-in này" })).toBeDisabled();
+    await user.click(screen.getByRole("button", { name: /Kiệt sức/ }));
     await user.click(screen.getByRole("button", { name: "Cho con bú" }));
-    await user.click(screen.getByRole("button", { name: "Lưu check-in" }));
+    await user.click(screen.getByRole("button", { name: "Lưu check-in này" }));
 
     // chat opens with the opener and no banner
-    expect(screen.getByText(/Hôm nay mẹ mệt và đang nặng lòng vì cho con bú/)).toBeInTheDocument();
+    expect(screen.getByText(/Hôm nay mẹ thấy kiệt sức và đang nặng lòng vì cho con bú/)).toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 
     // the mother writes something that the server classifies as Tier 3

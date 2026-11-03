@@ -1,4 +1,5 @@
-import { CHIP_Q } from "../content";
+import { CHIP_Q, canon } from "../content";
+import { dayGroup } from "./diary";
 import type { CheckinRecord, Message } from "../types";
 
 const joinVi = (items: string[]): string =>
@@ -17,10 +18,10 @@ export function chipsFor(c: CheckinRecord): string[] {
 
 /** The assistant's first message after a check-in (prototype mkOpener). Always Tier 1. */
 export function mkOpener(c: CheckinRecord): Message {
-  const moods = joinVi(c.moods.map((m) => m.toLowerCase()));
+  const moods = joinVi(c.moods.map((m) => canon(m).toLowerCase()));
   const stress = c.stressors.slice(0, 2).map((s) => s.toLowerCase());
   const text =
-    `Mình đây, mẹ ạ. Hôm nay mẹ ${moods}` +
+    `Mình đây, mẹ ạ. Hôm nay mẹ thấy ${moods}` +
     (stress.length ? ` và đang nặng lòng vì ${stress.join(" và ")}` : "") +
     " — mẹ muốn kể mình nghe thêm không?";
   const chips = chipsFor(c).slice(0, 3);
@@ -38,9 +39,7 @@ export function mkOpener(c: CheckinRecord): Message {
 export function reflect(checkins: CheckinRecord[]): string | null {
   if (!checkins.length) return null;
   const recent = checkins.slice(-4);
-  const tired = recent.filter(
-    (c) => c.moods.some((m) => m === "Mệt" || m === "Quá tải") || c.sleep === "Gần như không ngủ",
-  );
+  const tired = recent.filter((c) => dayGroup(c) === "tired" || canon(c.sleep ?? "") === "Thức trắng");
   if (tired.length >= 3) {
     return "Mình thấy mẹ đã mệt vài ngày liền — mẹ có muốn nói chuyện một chút không?";
   }

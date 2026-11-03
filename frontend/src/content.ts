@@ -4,38 +4,76 @@ export interface Option {
   label: string;
   emoji: string;
   tint: string;
+  sub?: string; // second line on the check-in cards
+  hint?: string; // shown on the diary summary
 }
 
-export const MOODS: Option[] = [
-  { label: "Ổn", emoji: "🌤️", tint: "#E7EEF1" },
-  { label: "Mệt", emoji: "😴", tint: "#EDEAE6" },
-  { label: "Quá tải", emoji: "🌊", tint: "#E9D9E3" },
-  { label: "Buồn", emoji: "🌧️", tint: "#DCE7ED" },
-  { label: "Cáu gắt", emoji: "🔥", tint: "#F6D9D9" },
+/** Redesign (2026-11-03): weather icons for moods, sleep cards with a second line. */
+export type MoodGroup = "tired" | "mixed" | "ok";
+
+export const MOODS: (Option & { group: MoodGroup })[] = [
+  { label: "Kiệt sức", emoji: "🌧️", tint: "#E9E5F4", group: "tired" },
+  { label: "Quá tải", emoji: "⛈️", tint: "#DCD6EC", group: "tired" },
+  { label: "Bấp bênh", emoji: "⛅", tint: "#EEF0F3", group: "mixed" },
+  { label: "Ổn định", emoji: "🌤️", tint: "#FBF0DC", group: "ok" },
+  { label: "Bình yên", emoji: "☀️", tint: "#FBE6C8", group: "ok" },
 ];
+
+/** Names used before the redesign still appear in check-ins that were already saved. */
+export const LEGACY: Record<string, string> = {
+  Mệt: "Kiệt sức",
+  "Cáu gắt": "Quá tải",
+  Buồn: "Bấp bênh",
+  Ổn: "Ổn định",
+  "Gần như không ngủ": "Thức trắng",
+  "Ngủ ít": "Tạm ổn",
+  "Ngủ đủ": "Hồi sức",
+};
+
+export const canon = (label: string): string => LEGACY[label] ?? label;
+export const moodOf = (label: string) => MOODS.find((m) => m.label === canon(label));
 
 export const SLEEPS: Option[] = [
-  { label: "Ngủ đủ", emoji: "🌕", tint: "#FBEEF2" },
-  { label: "Ngủ ít", emoji: "🌗", tint: "#F6D2E0" },
-  { label: "Gần như không ngủ", emoji: "🌑", tint: "#EFA9C2" },
+  { label: "Thức trắng", emoji: "🥱", tint: "#F4F7F9", sub: "< 2h / chập chờn", hint: "Mẹ cố nghỉ ngơi khi bé ngủ nếu được" },
+  { label: "Đứt quãng", emoji: "💤", tint: "#F4F7F9", sub: "Dậy nhiều cữ", hint: "Tranh thủ chợp mắt khi bé ngủ" },
+  { label: "Tạm ổn", emoji: "🛏️", tint: "#F4F7F9", sub: "Chợp mắt 4-5h", hint: "Mẹ đang giữ được nhịp nghỉ" },
+  { label: "Hồi sức", emoji: "✨", tint: "#F4F7F9", sub: "Ngủ sâu giấc hơn", hint: "Giấc ngủ đang giúp mẹ hồi sức" },
 ];
+
+export const sleepOf = (label: string | null) => (label ? SLEEPS.find((o) => o.label === canon(label)) : undefined);
+
+const plain = (label: string): Option => ({ label, emoji: "", tint: "#F4F7F9" });
 
 export const BODIES: Option[] = [
-  { label: "Cơ thể mình đang hồi phục ổn", emoji: "🌱", tint: "#E7EEF1" },
-  { label: "Có chỗ đau hoặc khó chịu", emoji: "🩹", tint: "#FCE4EC" },
-  { label: "Mình muốn được ai đó để ý đến mình", emoji: "💛", tint: "#F3E8DE" },
-];
+  "Mỏi cổ vai gáy",
+  "Đau lưng & hông",
+  "Căng tức ngực",
+  "Đau vết mổ / khâu",
+  "Đau đầu, chóng mặt",
+  "Mệt rã rời, uể oải",
+  "Cơ thể nhẹ nhõm, dễ chịu",
+].map(plain);
 
 export const STRESSORS: Option[] = [
-  { label: "Con quấy khóc, mất ngủ", emoji: "👶", tint: "#E7EEF1" },
-  { label: "Không còn là mình", emoji: "🪞", tint: "#F6D2E0" },
-  { label: "Cô đơn, không ai hỏi han", emoji: "🤍", tint: "#E7EEF1" },
-  { label: "Cho con bú", emoji: "🍼", tint: "#FCE4EC" },
-  { label: "Quá tải, không muốn ai chạm vào", emoji: "✋", tint: "#E9D9E3" },
-  { label: "Cơ thể chưa hồi phục", emoji: "🩹", tint: "#F4F7F9" },
-  { label: "Căng thẳng với chồng/gia đình", emoji: "🌪️", tint: "#FBEEF2" },
-  { label: "Áp lực tiền bạc, khó đi làm lại", emoji: "💸", tint: "#EDEAE6" },
-];
+  "Cho con bú",
+  "Mất ngủ kéo dài",
+  "Con khóc nhiều",
+  "Vết khâu & hồi phục",
+  "Cảm giác một mình",
+  "Áp lực người thân",
+  "Cơ thể thay đổi",
+  "Lo lắng công việc",
+].map(plain);
+
+/** Check-in worries -> the tip (kept in TIPS under its original name) shown for them. */
+export const TIP_KEY: Record<string, string> = {
+  "Con khóc nhiều": "Con quấy khóc, mất ngủ",
+  "Cơ thể thay đổi": "Không còn là mình",
+  "Cảm giác một mình": "Cô đơn, không ai hỏi han",
+  "Vết khâu & hồi phục": "Cơ thể chưa hồi phục",
+  "Áp lực người thân": "Căng thẳng với chồng/gia đình",
+  "Lo lắng công việc": "Áp lực tiền bạc, khó đi làm lại",
+};
 
 export interface Tip {
   text: string;
@@ -123,6 +161,20 @@ export const CHIP_Q: Record<string, string> = {
   "Quá tải": "Hôm nay mình thấy quá tải",
   Buồn: "Hôm nay mình thấy buồn",
   Mệt: "Hôm nay mình mệt quá",
+  "Kiệt sức": "Hôm nay mình kiệt sức quá",
+  "Bấp bênh": "Hôm nay mình thấy bấp bênh",
+  "Mất ngủ kéo dài": "Mình mất ngủ nhiều ngày rồi, phải làm sao?",
+  "Con khóc nhiều": "Con khóc suốt chiều tối",
+  "Vết khâu & hồi phục": "Bao lâu thì cơ thể mình hồi phục?",
+  "Cảm giác một mình": "Mình thấy cô đơn, chẳng ai hỏi han",
+  "Áp lực người thân": "Mình căng thẳng với chồng và gia đình",
+  "Cơ thể thay đổi": "Mình thấy không còn là mình nữa",
+  "Lo lắng công việc": "Mình lo chuyện tiền bạc và đi làm lại",
+  "Căng tức ngực": "Ngực mình căng tức, mình nên làm gì?",
+  "Đau vết mổ / khâu": "Vết mổ của mình đau, có bình thường không?",
+  "Đau đầu, chóng mặt": "Mình hay đau đầu, chóng mặt, có bình thường không?",
+  "Thức trắng": "Mình gần như không ngủ được, phải làm sao?",
+  "Đứt quãng": "Mình ngủ rất ít, phải làm sao?",
 };
 
 export const FEED_FORMULA: { key: "mom" | "only" | "mix"; label: string }[] = [
@@ -142,3 +194,6 @@ export const DEFAULT_SUGGESTIONS: Record<"1" | "2", string[]> = {
   "1": ["Mình muốn kể thêm", "Mình cần một mẹo nhỏ"],
   "2": ["Mình nên hỏi bác sĩ điều gì?", "Mình muốn kể thêm"],
 };
+
+/** Starter topics at the top of the chat (hidden after a Tier 3 reply). */
+export const STARTERS = ["Bé khóc dỗ không nín", "Lo lắng về sữa mẹ", "Cảm giác một mình", "Vết mổ / vết khâu đau"];

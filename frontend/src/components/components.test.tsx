@@ -92,39 +92,120 @@ describe("Support access", () => {
   });
 });
 
-describe("History", () => {
-  it("shows pinned notes and lets the mother delete one", async () => {
+describe("Nhật ký & Đã lưu", () => {
+  const today = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  };
+
+  it("shows pinned tips with a category, search, and lets the mother delete one", async () => {
+    const user = userEvent.setup();
     render(
       <App
         api={mockApi()}
         initial={inApp({
           screen: "history",
-          notes: [{ key: "k", text: "Không phải lỗi của mẹ.", topic: "Con khóc suốt", date: "2/11/2026", dkey: "2026-11-02" }],
+          diaryTab: "pins",
+          notes: [
+            { key: "k1", text: "Chườm ấm nhẹ nhàng trước khi cho bú.", topic: "Ngực căng", date: "2/11/2026", dkey: "2026-11-02" },
+            { key: "k2", text: "Mẹ đừng tự trách mình nhé.", topic: "Mệt quá", date: "2/11/2026", dkey: "2026-11-02" },
+          ],
         })}
       />,
     );
-    await userEvent.click(screen.getByRole("tab", { name: "Ghi chú" }));
-    expect(screen.getByText("Không phải lỗi của mẹ.")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Xoá ghi chú" }));
-    expect(screen.getByText(/Chưa có ghi chú nào/)).toBeInTheDocument();
+    expect(screen.getByText("Y tế & Phục hồi sau sinh")).toBeInTheDocument(); // auto category on the card
+    expect(screen.getAllByText("Vỗ về tinh thần").length).toBeGreaterThan(1); // the pill on the card and the filter chip
+    await user.type(screen.getByLabelText("Tìm trong thông tin đã ghim"), "chuom am");
+    expect(screen.queryByText("Mẹ đừng tự trách mình nhé.")).not.toBeInTheDocument();
+    expect(screen.getByText("Chườm ấm nhẹ nhàng trước khi cho bú.")).toBeInTheDocument();
+    await user.clear(screen.getByLabelText("Tìm trong thông tin đã ghim"));
+    const del = screen.getAllByRole("button", { name: "Xoá khỏi mục đã ghim" });
+    await user.click(del[0]);
+    await user.click(screen.getByRole("button", { name: "Xoá khỏi mục đã ghim" }));
+    expect(screen.getByText(/Chưa có gì được ghim/)).toBeInTheDocument();
   });
 
-  it("shows the check-in of a selected day on the calendar", async () => {
-    const now = new Date();
-    const key = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  it("shows the 7-day summary, the medical cue, and a day card that opens a chat about that day", async () => {
+    const user = userEvent.setup();
     render(
       <App
         api={mockApi()}
         initial={inApp({
           screen: "history",
-          checkins: [{ key, date: "x", moods: ["Mệt"], sleep: "Ngủ ít", bodies: [], stressors: ["Cho con bú"] }],
+          checkins: [
+            {
+              key: today(),
+              date: "x",
+              moods: ["Mệt"], // saved before the redesign
+              sleep: "Ngủ ít",
+              bodies: ["Mỏi cổ vai gáy"],
+              stressors: ["Cho con bú"],
+              note: "Bé thức 4 lần",
+            },
+          ],
         })}
       />,
     );
-    await userEvent.click(screen.getByRole("button", { name: new RegExp(`^Ngày ${now.getDate()}, đã check-in Mệt`) }));
-    const detail = screen.getByLabelText("Chi tiết ngày");
-    expect(within(detail).getByText("Tâm trạng: Mệt")).toBeInTheDocument();
-    expect(within(detail).getByText("Giấc ngủ: Ngủ ít")).toBeInTheDocument();
-    expect(within(detail).getByText("Nặng lòng: Cho con bú")).toBeInTheDocument();
+    expect(screen.getByText("Cần nghỉ ngơi")).toBeInTheDocument();
+    expect(screen.getByText(/1 ngày mệt • 0 ngày êm/)).toBeInTheDocument();
+    expect(screen.getByText(/sốt cao trên 38.5°C/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Kiệt sức/).length).toBeGreaterThan(0); // old name shown as the new one
+    await user.click(screen.getByRole("button", { name: /Chi tiết ngày/ }));
+    expect(screen.getByText("Bé thức 4 lần")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Tâm sự về ngày này" }));
+    expect(screen.getByText(/Hôm nay mẹ thấy kiệt sức/)).toBeInTheDocument();
+  });
+
+  it("filters the diary by mood", async () => {
+    const user = userEvent.setup();
+    const mk = (key: string, moods: string[]) => ({ key, date: key, moods, sleep: null, bodies: [], stressors: [] });
+    render(
+      <App
+        api={mockApi()}
+        initial={inApp({ screen: "history", checkins: [mk(today(), ["Bình yên"]), mk("2020-01-01", ["Kiệt sức"])] })}
+      />,
+    );
+    expect(screen.getByText("Hiển thị 2 lượt ghi")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Lúc mệt mỏi" }));
+    expect(screen.getByText("Hiển thị 1 lượt ghi")).toBeInTheDocument();
+  });
+});
+
+describe("Chat header and pins", () => {
+  it("pins a single bubble, shows the toast, and the tab badge counts it", async () => {
+    const user = userEvent.setup();
+    render(
+      <App
+        api={mockApi()}
+        initial={inApp({
+          messages: [
+            { role: "user", content: "Mệt quá" },
+            { role: "assistant", content: "A\n\nB", segments: ["A", "B"], tier: "1", pinnable: true },
+          ],
+        })}
+      />,
+    );
+    await user.click(screen.getAllByRole("button", { name: "Ghim câu trả lời này" })[1]);
+    expect(await screen.findByRole("status")).toHaveTextContent("Đã lưu vào Thông tin đã ghim");
+    expect(screen.getByRole("button", { name: "Bỏ ghim câu trả lời" })).toBeInTheDocument();
+    expect(screen.getByLabelText("1 mục đã ghim")).toBeInTheDocument();
+  });
+
+  it("offers starter topics, and hides them after a Tier 3 reply", () => {
+    const { unmount } = render(<App api={mockApi()} initial={inApp()} />);
+    expect(screen.getByRole("button", { name: "Bé khóc dỗ không nín" })).toBeInTheDocument();
+    unmount();
+    render(
+      <App
+        api={mockApi()}
+        initial={inApp({
+          messages: [
+            { role: "user", content: "x" },
+            { role: "assistant", content: "Mẹ gọi 115.", tier: "3-PHYSICAL", pinnable: false },
+          ],
+        })}
+      />,
+    );
+    expect(screen.queryByRole("button", { name: "Bé khóc dỗ không nín" })).not.toBeInTheDocument();
   });
 });

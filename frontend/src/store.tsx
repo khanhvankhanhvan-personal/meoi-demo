@@ -45,6 +45,8 @@ export interface State {
   recoveryCode: string | null; // shown once after sign-up / PIN reset
   syncError: boolean;
   nudgeDismissed: boolean;
+  diaryTab: "log" | "pins"; // which part of "Nhật ký & Đã lưu" is open
+  toast: string | null;
 }
 
 export const emptyBaby = (): Baby => ({ label: "", formula: null, method: null });
@@ -65,6 +67,8 @@ export const initialState: State = {
   recoveryCode: null,
   syncError: false,
   nudgeDismissed: false,
+  diaryTab: "log",
+  toast: null,
 };
 
 export const isTier3 = (tier?: string | null): boolean => !!tier && tier.startsWith("3");
@@ -81,7 +85,11 @@ export type Action =
   | { type: "replied"; reply: ChatReply }
   | { type: "failed" }
   | { type: "dismissCrisis" }
-  | { type: "togglePin"; index: number; now: Date }
+  | { type: "togglePin"; index: number; seg?: number; now: Date }
+  | { type: "openDiary"; tab: "log" | "pins"; day?: string | null }
+  | { type: "chatAbout"; record: CheckinRecord }
+  | { type: "newChat" }
+  | { type: "clearToast" }
   | { type: "deleteNote"; key: string }
   | { type: "booted" }
   | { type: "signedIn"; user: User; account: Account | null; recoveryCode: string | null }
@@ -156,10 +164,11 @@ export function reducer(state: State, action: Action): State {
       return { ...state, crisis: null };
     case "togglePin": {
       const m = state.messages[action.index];
-      // Tier 3 is never pinned: the server rejects it too (M6); this mirrors the rule in the client.
+      // Tier 3 is never pinned: the server rejects it too; this mirrors the rule in the client.
       if (!m || m.role !== "assistant" || m.error || m.pinnable === false || isTier3(m.tier)) return state;
-      if (state.notes.some((n) => n.key === m.content)) {
-        return { ...state, notes: state.notes.filter((n) => n.key !== m.content) };
+      const text = action.seg !== undefined && m.segments ? (m.segments[action.seg] ?? m.content) : m.content;
+      if (state.notes.some((n) => n.key === text)) {
+        return { ...state, notes: state.notes.filter((n) => n.key !== text), toast: "Đã bỏ ghim" };
       }
       let topic = "Check-in hôm nay";
       for (let k = action.index - 1; k >= 0; k--) {
@@ -169,14 +178,22 @@ export function reducer(state: State, action: Action): State {
         }
       }
       const note: Note = {
-        key: m.content,
-        text: m.content,
+        key: text,
+        text,
         topic,
         date: vf(action.now),
         dkey: kf(action.now),
       };
-      return { ...state, notes: [...state.notes, note] };
+      return { ...state, notes: [...state.notes, note], toast: "Đã lưu vào Thông tin đã ghim" };
     }
+    case "openDiary":
+      return { ...state, screen: "history", diaryTab: action.tab, selDay: action.day ?? null };
+    case "chatAbout":
+      return { ...state, screen: "chat", messages: [...state.messages, mkOpener(action.record)] };
+    case "newChat":
+      return { ...state, messages: [], crisis: null };
+    case "clearToast":
+      return state.toast ? { ...state, toast: null } : state;
     case "deleteNote":
       return { ...state, notes: state.notes.filter((n) => n.key !== action.key) };
     case "booted":

@@ -44,6 +44,22 @@ def test_checkin_latest_per_day_wins(client: TestClient) -> None:
     ]
 
 
+def test_checkin_private_note_is_saved_and_limited(client: TestClient) -> None:
+    signup(client, "mebong")
+    body = {
+        "moods": ["Bình yên"],
+        "sleep": "Hồi sức",
+        "bodies": [],
+        "stressors": [],
+        "note": "Bé ngủ 4 cữ",
+    }
+    assert client.put("/checkins/2026-11-02", json=body).json()["note"] == "Bé ngủ 4 cữ"
+    assert client.get("/checkins").json()[0]["note"] == "Bé ngủ 4 cữ"
+    client.put("/checkins/2026-11-02", json={**body, "note": None})
+    assert client.get("/checkins").json()[0]["note"] is None
+    assert client.put("/checkins/2026-11-02", json={**body, "note": "x" * 501}).status_code == 422
+
+
 def test_notes_add_list_delete_and_dedupe(client: TestClient) -> None:
     signup(client, "mebong")
     body = {

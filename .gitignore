@@ -9,3 +9,5 @@ __pycache__/
 .ruff_cache/
 *.egg-info/
 backend/evals/out/
+
+.claude/worktrees/

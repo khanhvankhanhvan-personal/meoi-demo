@@ -87,6 +87,7 @@ class Checkin(Base):
     sleep: Mapped[str | None] = mapped_column(String(40), nullable=True)
     bodies: Mapped[list[str]] = mapped_column(JSON)
     stressors: Mapped[list[str]] = mapped_column(JSON)
+    note: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
 
 class Note(Base):
