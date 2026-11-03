@@ -241,7 +241,6 @@ function BirthProfile() {
         legend="Lần sinh"
         options={PARITY}
         value={draft.firstTime ? "first" : "other"}
-        columns={2}
         onChange={(v) => v && setDraft({ ...draft, firstTime: v === "first" })}
       />
       <CardChoice
@@ -256,7 +255,6 @@ function BirthProfile() {
         legend="Cảm nhận hồi phục"
         options={RECOVERY_FEELS}
         value={draft.recoveryFeel ?? null}
-        columns={2}
         onChange={(v: RecoveryFeel | null) => setDraft({ ...draft, recoveryFeel: v })}
       />
       <div className="actions">

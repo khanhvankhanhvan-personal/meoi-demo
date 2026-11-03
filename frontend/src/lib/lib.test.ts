@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ageLabel, birthDateError, daysSince, kf, monthsOld, vf, weeksOld } from "./dates";
 import { mkOpener, reflect, chipsFor } from "./opener";
 import { canon } from "../content";
+import { momentLine } from "./greeting";
 import { categorize, filterCheckins, insight } from "./diary";
 import type { CheckinRecord } from "../types";
 
@@ -126,5 +127,17 @@ describe("diary helpers", () => {
     expect(filterCheckins(list, "30", "any", now)).toHaveLength(2);
     expect(filterCheckins(list, "7", "ok", now)).toHaveLength(0);
     expect(filterCheckins(list, "all", "ok", now).map((c) => c.key)).toEqual(["2026-10-20", "2026-09-01"]);
+  });
+});
+
+describe("momentLine", () => {
+  const at = (h: number) => momentLine(new Date(2026, 10, 4, h, 0));
+  it("greets the 2am feed differently from the morning", () => {
+    expect(at(2)).toContain("cữ đêm");
+    expect(at(8)).toContain("Buổi sáng");
+    expect(at(23)).toContain("Khuya rồi");
+  });
+  it("always returns a line, for every hour", () => {
+    for (let h = 0; h < 24; h++) expect(at(h).length).toBeGreaterThan(10);
   });
 });

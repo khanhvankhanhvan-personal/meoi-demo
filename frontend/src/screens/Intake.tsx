@@ -100,7 +100,7 @@ export function Intake() {
             }}
           />
           <h3>2. Đây có phải lần đầu mẹ sinh con không?</h3>
-          <CardChoice legend="Lần sinh" options={PARITY} value={parity} columns={2} onChange={setParity} />
+          <CardChoice legend="Lần sinh" options={PARITY} value={parity} onChange={setParity} />
           <h3>3. Phương pháp sinh lần này của mẹ:</h3>
           <CardChoice legend="Cách sinh" options={BIRTH_KINDS} value={kind} onChange={setKind} />
           <h3>4. Cảm nhận hồi phục hiện tại của mẹ:</h3>
@@ -108,7 +108,6 @@ export function Intake() {
             legend="Cảm nhận hồi phục"
             options={RECOVERY_FEELS}
             value={recovery}
-            columns={2}
             onChange={setRecovery}
           />
         </div>
