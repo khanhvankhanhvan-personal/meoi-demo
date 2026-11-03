@@ -98,3 +98,22 @@ Mục 8 và 9 mới quyết định sản phẩm có hữu ích thật hay khôn
 ## 10. Phiếu phản hồi nhanh
 Mở repo trên GitHub → **Issues → New issue → "Yêu cầu thay đổi"** và điền biểu mẫu (màn hình, điều mẹ thấy, điều mẹ muốn, ảnh, có liên quan an toàn/nội dung y tế không).
 Nếu mẹ không chắc, cứ chọn "Không chắc": mình sẽ phân làn giúp mẹ.
+
+## 11. Đường nhanh: gõ `/ship` (ít công sức nhất cho mẹ)
+Mẹ chỉ cần **mô tả ngắn + dán ảnh chụp màn hình** trong phiên Claude Code (ví dụ: `/ship [ảnh] đổi ô chọn ngày thành bánh xe, nút căn lại cho đều`). Mình tự làm phần còn lại:
+
+| Bước | Ai làm | Mẹ tốn |
+|---|---|---|
+| Hiểu yêu cầu, xác định Làn, hỏi tối đa **một** câu nếu thật sự cần | Claude | 0-1 phút |
+| Sửa code + test, chạy lint/kiểu/test/build, chụp ảnh sau khi sửa | Claude | 0 |
+| Xem ảnh, nói "ok" | Mẹ | ~1 phút |
+| **Làn A:** đẩy nhánh `ui/<tên>` -> workflow *Ship UI change (Lane A)* tự mở PR, chạy CI, **tự merge khi CI xanh** -> Render tự deploy -> *Verify deployment* tự kiểm tra bản công khai | Tự động | 0 |
+| **Làn B/C:** mở PR, mẹ bấm Merge (Làn C kèm evals + mẹ chấm) | Mẹ | như mục 3-4 |
+| Báo "đã lên chưa" (đối chiếu `/health` với commit) | Claude | 0 |
+
+**Làn A tự merge có rào chắn:** chỉ nhánh `ui/*`; chỉ tệp giao diện thuần (`scripts/lane-check.sh`; **không** gồm `Chat.tsx`, `CrisisBanner`, `SupportList`, `content.ts`, `opener.ts`, `api.ts`, `store`); CI phải xanh; chỉ merge đúng commit mẹ đã duyệt (đẩy thêm commit thì PR cũ không merge); không merge trong **thời gian đóng băng** (21:00 ngày 3/11 đến hết 4/11); **công tắc tắt:** đặt biến repo `AUTO_SHIP` = `off`.
+Nếu nhánh `ui/*` có tệp ngoài Làn A, workflow vẫn mở PR nhưng **không** tự merge.
+**Quay lui:** mở PR đã merge -> Revert -> (đây là Làn A nên có thể gửi lại qua `/ship`: "hoàn tác thay đổi vừa rồi").
+
+**Cài đặt một lần (2 phút):** GitHub -> Settings -> Actions -> General -> bật *Allow GitHub Actions to create and approve pull requests*; Settings -> Variables -> thêm `PUBLIC_URL` = `https://meoi.onrender.com` (để bước kiểm tra sau deploy chạy). Cần để workflow này nằm trên nhánh `main` thì mới chạy.
+**Chưa kiểm chứng:** workflow chưa chạy thật lần nào; lần `/ship` Làn A đầu tiên là lần chạy thử, mình sẽ theo dõi.
