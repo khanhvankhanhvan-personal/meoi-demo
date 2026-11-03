@@ -1,7 +1,7 @@
 import { AccountCard } from "../components/AccountCard";
 import { Choice } from "../components/Chips";
 import { SupportList } from "../components/SupportList";
-import { FEED_FORMULA, FEED_METHOD } from "../content";
+import { BIRTH_KINDS, FEED_FORMULA, FEED_METHOD } from "../content";
 import { WheelDatePicker } from "../components/WheelDatePicker";
 import { ageLabel, birthDateError } from "../lib/dates";
 import { emptyBaby, useStore } from "../store";
@@ -24,12 +24,15 @@ export function Profile() {
           <h3>Cách sinh</h3>
           <Choice
             legend="Cách sinh"
-            options={[
-              { key: "normal", label: "Sinh thường" },
-              { key: "csection", label: "Sinh mổ" },
-            ]}
-            value={p.birthType}
-            onChange={(v) => v && dispatch({ type: "setProfile", profile: { birthType: v } })}
+            options={BIRTH_KINDS}
+            value={p.birthType === "normal" ? "normal" : (p.csectionKind ?? null)}
+            onChange={(v) =>
+              v &&
+              dispatch({
+                type: "setProfile",
+                profile: { birthType: v === "normal" ? "normal" : "csection", csectionKind: v === "normal" ? null : v },
+              })
+            }
           />
           <div className="field">
             <span className="small muted">Ngày sinh của bé</span>

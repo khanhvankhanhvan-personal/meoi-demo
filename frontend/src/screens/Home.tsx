@@ -46,6 +46,17 @@ export function Home() {
         </section>
       )}
 
+      {!state.profile && (
+        <section className="card soft">
+          <h3>Mình chưa biết nhiều về mẹ và bé</h3>
+          <p className="muted small">Mẹ cho mình vài thông tin để mình đồng hành sát hơn nhé. Chỉ mất 1 phút.</p>
+          <div className="actions">
+            <button className="btn primary" onClick={() => dispatch({ type: "go", screen: "intake" })}>
+              Điền thông tin
+            </button>
+          </div>
+        </section>
+      )}
       <h1 className="serif greet">Chào mẹ.</h1>
       {state.profile && (
         <p className="lead">

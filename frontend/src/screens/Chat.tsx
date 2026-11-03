@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CrisisBanner } from "../components/CrisisBanner";
 import { Icon } from "../components/Icons";
-import { DEFAULT_SUGGESTIONS, STARTERS } from "../content";
+import { DEFAULT_SUGGESTIONS } from "../content";
 import { isTier3, useStore } from "../store";
 import type { Message } from "../types";
 
@@ -36,7 +36,6 @@ export function Chat() {
   };
 
   const strip = suggestionsFor(state.messages, state.sending);
-  const lastTier3 = isTier3(state.messages[state.messages.length - 1]?.tier);
   const pinned = (s: string) => state.notes.some((n) => n.key === s);
 
   return (
@@ -64,19 +63,6 @@ export function Chat() {
 
       {state.crisis && (
         <CrisisBanner crisis={state.crisis} onDismiss={() => dispatch({ type: "dismissCrisis" })} />
-      )}
-
-      {!lastTier3 && (
-        <div className="starters" aria-label="Gợi ý tâm sự">
-          <span className="starters-label">
-            <Icon name="sparkle" size={16} /> Gợi ý tâm sự:
-          </span>
-          {STARTERS.map((s) => (
-            <button key={s} className="chip pill" disabled={state.sending} onClick={() => void send(s)}>
-              {s}
-            </button>
-          ))}
-        </div>
       )}
 
       <div className="messages" aria-live="polite">

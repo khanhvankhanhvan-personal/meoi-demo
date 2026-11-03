@@ -33,6 +33,12 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M12 8v8M8 12h8" />
     </>
   ),
+  calendar: (
+    <>
+      <rect x="4" y="5.5" width="16" height="14.5" rx="2.5" />
+      <path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" />
+    </>
+  ),
   chevron: <path d="m9 6 6 6-6 6" />,
   close: <path d="M6 6l12 12M18 6 6 18" />,
   user: (

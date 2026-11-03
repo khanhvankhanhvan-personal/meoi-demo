@@ -28,34 +28,39 @@ describe("smoke: intake -> check-in -> chat", () => {
     });
     render(<App api={api} initial={{ ...initialState, screen: "onboarding" }} />);
 
-    // onboarding
-    await user.click(screen.getByRole("button", { name: "Bỏ qua" }));
+    // step 1: welcome
+    await user.click(screen.getByRole("button", { name: /Làm quen cùng Mẹ Ơi!/ }));
 
-    // intake step 1: one baby
-    await user.click(screen.getByRole("button", { name: "1 bé" }));
-    await user.click(screen.getByRole("button", { name: "Tiếp tục" }));
+    // step 2: the birth (one baby is preselected; the next button needs first-time and the birth method)
+    expect(screen.getByRole("button", { name: /Tiếp tục/ })).toBeDisabled();
+    await user.click(screen.getByRole("button", { name: /Lần đầu làm mẹ/ }));
+    await user.click(screen.getByRole("button", { name: /Sinh mổ chủ động/ }));
+    await user.click(screen.getByRole("button", { name: /Còn đau nhức vết mổ/ }));
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/ }));
 
-    // step 2: birth date six weeks ago
+    // step 3: birth date six weeks ago
     const sixWeeksAgo = new Date();
     sixWeeksAgo.setDate(sixWeeksAgo.getDate() - 42);
     const wheel = (name: string) => within(screen.getByRole("listbox", { name }));
     await user.click(wheel("Năm").getByRole("option", { name: String(sixWeeksAgo.getFullYear()) }));
     await user.click(wheel("Tháng").getByRole("option", { name: `Tháng ${sixWeeksAgo.getMonth() + 1}` }));
-    await user.click(wheel("Ngày").getByRole("option", { name: String(sixWeeksAgo.getDate()) }));
-    expect(screen.getByText(/khoảng 1 tháng tuổi/)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Tiếp tục" }));
+    await user.click(wheel("Ngày").getByRole("option", { name: `Ngày ${sixWeeksAgo.getDate()}` }));
+    expect(screen.getByText("Con hiện được 1 tháng tuổi")).toBeInTheDocument();
+    expect(screen.getByText(/Bé thường quấy nhiều vào chiều tối/)).toBeInTheDocument(); // the sentence for this age
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/ }));
 
-    // step 3: profile
-    await user.click(screen.getByRole("button", { name: "Sinh mổ" }));
-    await user.click(screen.getByRole("button", { name: "Sữa mẹ hoàn toàn" }));
-    await user.click(screen.getByRole("button", { name: "Bú trực tiếp" }));
-    await user.click(screen.getByRole("button", { name: "Đúng rồi, đây là em bé đầu tiên của mình" }));
-    await user.click(screen.getByRole("button", { name: "Xong" }));
+    // step 4: feeding
+    await user.click(screen.getByRole("button", { name: /Ti mẹ trực tiếp/ }));
+    await user.click(screen.getByRole("button", { name: /Bú mẹ hoàn toàn/ }));
+    await user.click(screen.getByRole("button", { name: /Tiếp tục/ }));
 
-    // home, then the check-in sheet
+    // step 5: summary, one help need, then straight into the check-in
+    expect(screen.getByText("Mẹ đã làm rất tuyệt vời rồi.")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /Lắng nghe lúc 2h sáng/ }));
+    await user.click(screen.getByRole("button", { name: /Khám phá Trang chủ & Check-in ngay/ }));
+
+    // home with the check-in sheet open
     expect(screen.getByText("Chào mẹ.")).toBeInTheDocument();
-    expect(screen.getByText(/khoảng 1 tháng tuổi|1 tháng tuổi/)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Check-in cảm xúc của mẹ hiện tại" }));
     expect(screen.getByRole("button", { name: "Lưu check-in này" })).toBeDisabled();
     await user.click(screen.getByRole("button", { name: /Kiệt sức/ }));
     await user.click(screen.getByRole("button", { name: "Cho con bú" }));
@@ -88,6 +93,9 @@ describe("smoke: intake -> check-in -> chat", () => {
       birth_type: "csection",
       first_time: true,
       babies: [{ label: "", formula: "mom", method: "direct" }],
+      csection_kind: "planned",
+      recovery_feel: "wound_pain",
+      support_needs: ["night_listen"],
     });
   });
 

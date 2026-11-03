@@ -75,7 +75,7 @@ export const isTier3 = (tier?: string | null): boolean => !!tier && tier.startsW
 
 export type Action =
   | { type: "go"; screen: Screen }
-  | { type: "finishIntake"; profile: Profile; babies: Baby[] }
+  | { type: "finishIntake"; profile: Profile; babies: Baby[]; then?: "home" | "checkin" | "chat" }
   | { type: "setProfile"; profile: Partial<Profile> }
   | { type: "setBabies"; babies: Baby[] }
   | { type: "setTrusted"; trusted: Partial<TrustedContact> }
@@ -103,7 +103,7 @@ export function reducer(state: State, action: Action): State {
     case "go":
       return { ...state, screen: action.screen };
     case "finishIntake":
-      return { ...state, profile: action.profile, babies: action.babies, screen: "home" };
+      return { ...state, profile: action.profile, babies: action.babies, screen: action.then ?? "home" };
     case "setProfile":
       return state.profile ? { ...state, profile: { ...state.profile, ...action.profile } } : state;
     case "setBabies":

@@ -64,7 +64,7 @@ describe("sign in", () => {
     expect(go).toBeDisabled();
     await user.click(screen.getByRole("checkbox", { name: "Mẹ đã lưu mã này" }));
     await user.click(go);
-    expect(screen.getByText("Lần sinh này mẹ có mấy bé?")).toBeInTheDocument(); // new account -> intake
+    expect(screen.getByText("Cuộc sinh của mẹ")).toBeInTheDocument(); // new account -> onboarding questions
     expect(screen.queryByText("ABCD-EFGH-JKLM-NPQR")).not.toBeInTheDocument();
   });
 

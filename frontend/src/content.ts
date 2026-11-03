@@ -123,27 +123,6 @@ export const DEFAULT_TIP: Tip = {
   tag: "EMOTIONAL",
 };
 
-export const ONBOARDING = [
-  {
-    title: "Gỡ rối cùng mẹ",
-    body: "Mình giúp mẹ tự chăm sóc chính mình và em bé với những chỉ dẫn rõ ràng, dựa trên nguồn y khoa đáng tin cậy.",
-  },
-  {
-    title: "Luôn lắng nghe mẹ",
-    body: "Mỗi ngày chỉ cần vài chạm để chia sẻ cảm xúc. Ứng dụng sẽ gợi ý điều phù hợp, hỏi thăm khi mẹ mệt vài ngày liền và lưu lại để mẹ có nhật ký cảm xúc tổng quan.",
-  },
-  {
-    title: "Kết nối đúng nơi cần",
-    body: "Mình là nguồn kết nối mẹ với nguồn hỗ trợ chính thống khi có vấn đề cấp thiết.",
-    sources: [
-      { n: "Đặt lịch hẹn với bác sĩ", d: "Khi mẹ hoặc bé cần được khám." },
-      { n: "HOPE", d: "Có người lắng nghe khi mẹ quá tải (16:30–20:30)." },
-      { n: "CSAGA", d: "Hỗ trợ kín đáo khi mẹ bị đe dọa hay bạo lực." },
-      { n: "Ngôi nhà Bình yên", d: "Đồng hành cùng mẹ tìm lại cảm giác an toàn." },
-    ],
-  },
-];
-
 /** stressor / body / sleep / mood -> a question the mother can tap on the home screen and in the opener */
 export const CHIP_Q: Record<string, string> = {
   "Con quấy khóc, mất ngủ": "Con khóc suốt chiều tối",
@@ -177,23 +156,87 @@ export const CHIP_Q: Record<string, string> = {
   "Đứt quãng": "Mình ngủ rất ít, phải làm sao?",
 };
 
-export const FEED_FORMULA: { key: "mom" | "only" | "mix"; label: string }[] = [
-  { key: "mom", label: "Sữa mẹ hoàn toàn" },
-  { key: "only", label: "Sữa công thức hoàn toàn" },
-  { key: "mix", label: "Kết hợp" },
+export interface Card<T extends string = string> {
+  key: T;
+  label: string;
+  sub?: string;
+}
+
+export const FEED_FORMULA: Card<"mom" | "only" | "mix">[] = [
+  { key: "mom", label: "Bú mẹ hoàn toàn", sub: "Không dùng sữa công thức, chỉ dùng sữa mẹ" },
+  { key: "mix", label: "Dặm thêm sữa công thức", sub: "Bổ sung thêm cữ đêm hoặc dặm khi mẹ chưa kịp về đủ sữa" },
+  { key: "only", label: "Dùng sữa công thức hoàn toàn", sub: "Bé hấp thu hoàn toàn từ sữa công thức phù hợp" },
 ];
 
-export const FEED_METHOD: { key: "direct" | "pump" | "both"; label: string }[] = [
-  { key: "direct", label: "Bú trực tiếp" },
-  { key: "pump", label: "Ti bình" },
-  { key: "both", label: "Song song cả hai cách" },
+export const FEED_METHOD: Card<"direct" | "pump" | "both" | "latch" | "bottle">[] = [
+  { key: "direct", label: "Ti mẹ trực tiếp", sub: "Bé ngậm bú mẹ trực tiếp qua bầu ngực" },
+  { key: "pump", label: "Hút sữa ra bình", sub: "Mẹ hút cữ đều đặn và cho con bú bình sữa mẹ" },
+  { key: "both", label: "Kết hợp ti mẹ & ti bình", sub: "Bé vừa bú mẹ trực tiếp vừa ti bình khi cần" },
+  { key: "latch", label: "Đang tập khớp ngậm / Đau rát", sub: "Con ngậm nông, nứt cổ gà hoặc mẹ đang chịu đau khi cho bú" },
+  { key: "bottle", label: "Ti bình sữa công thức", sub: "Bé dùng bình với sữa công thức" },
 ];
+
+/** Onboarding answers (redesign 2026-11-03). */
+export const BABY_COUNTS: Card<"1" | "2" | "3">[] = [
+  { key: "1", label: "1 bé", sub: "Bé đơn" },
+  { key: "2", label: "2 bé", sub: "Sinh đôi" },
+  { key: "3", label: "3 bé", sub: "Sinh ba" },
+];
+
+export const PARITY: Card<"first" | "other">[] = [
+  { key: "first", label: "Lần đầu làm mẹ", sub: "Con đầu lòng, mọi thứ đều bỡ ngỡ mới mẻ" },
+  { key: "other", label: "Đã từng sinh con", sub: "Bé thứ 2 trở lên, mỗi lần sinh là một trải nghiệm riêng" },
+];
+
+export const BIRTH_KINDS: Card<"normal" | "planned" | "emergency">[] = [
+  { key: "normal", label: "Sinh thường (ngả âm đạo)", sub: "Theo dõi vết khâu tầng sinh môn và sự co hồi tử cung" },
+  { key: "planned", label: "Sinh mổ chủ động (theo lịch)", sub: "Mổ chỉ định trước ngày dự sinh, cần chăm sóc vết mổ thành bụng" },
+  { key: "emergency", label: "Sinh mổ cấp cứu (chuyển dạ rồi mổ)", sub: "Trải qua cả đau chuyển dạ và vết mổ, cơ thể thường mất nhiều sức hơn" },
+];
+
+export const RECOVERY_FEELS: Card<"wound_pain" | "ok" | "exhausted" | "need_help">[] = [
+  { key: "wound_pain", label: "Còn đau nhức vết mổ/khâu" },
+  { key: "ok", label: "Hồi phục tương đối êm" },
+  { key: "exhausted", label: "Mệt mỏi rã rời toàn thân" },
+  { key: "need_help", label: "Cần nhiều người hỗ trợ" },
+];
+
+export const SUPPORT_NEEDS: Card<"night_listen" | "breastfeeding" | "exhaustion">[] = [
+  { key: "night_listen", label: "Lắng nghe lúc 2h sáng" },
+  { key: "breastfeeding", label: "Sữa mẹ & cữ bú" },
+  { key: "exhaustion", label: "Kiệt sức & thiếu ngủ" },
+];
+
+export const WELCOME = {
+  title: "Chào mẹ, mình là Mẹ Ơi!",
+  lead: "Hành trình sau sinh là một giai đoạn kỳ diệu, nhưng cũng đầy những đêm dài mệt nhoài, những lúc con khóc ngặt nghèo và cảm giác bối rối không biết tỏ cùng ai.",
+  cardTitle: "Một góc an yên dành riêng cho mẹ",
+  cardBody: "Mẹ không cần gồng mình để luôn hoàn hảo. Mọi bối rối, mệt mỏi hay cảm xúc tủi thân đều có thể trút ra ở đây.",
+  bullets: [
+    "Luôn có mặt bất kể khi nào — nhất là những cữ đêm 2h sáng",
+    "Lắng nghe không giáo điều, không phán xét",
+    "Thấu hiểu từng hoàn cảnh sinh, cữ sữa và sức khỏe của mẹ",
+  ],
+};
+
+/**
+ * One sentence about the phase the baby and the mother are in, shown under the age on the date step.
+ * DRAFT wording (2026-11-03): general, non-diagnostic, no numbers beyond the 6-8 week recovery already
+ * in TIPS. Needs review by a medical reviewer before beta (CLAUDE.md, open decision 5).
+ */
+export const AGE_NOTES: { maxDays: number; text: string }[] = [
+  { maxDays: 14, text: "Những ngày đầu, bé ngủ phần lớn thời gian và bú rất nhiều; cơ thể mẹ cũng đang hồi phục, nên mẹ nghỉ khi bé ngủ nếu có thể." },
+  { maxDays: 42, text: "Bé thường quấy nhiều vào chiều tối và bú dày; đây là giai đoạn phổ biến, mẹ cũng cần ăn, uống và ngủ đủ để hồi phục." },
+  { maxDays: 91, text: "Bé bắt đầu mỉm cười và nhìn theo mẹ; cơ thể mẹ thường hồi phục cơ bản sau khoảng 6-8 tuần, lâu hơn nếu sinh mổ." },
+  { maxDays: 183, text: "Bé thường ngủ đêm dài hơn và hóng chuyện nhiều; nhiều mẹ vẫn thấy mệt và cảm xúc lên xuống vẫn là điều thường gặp." },
+  { maxDays: 365, text: "Bé có thể bắt đầu ăn dặm và tập bò; mẹ có thể cần thêm thời gian cho bản thân và sự hỗ trợ từ người thân." },
+  { maxDays: 99999, text: "Bé đang tập đi và nói; hành trình làm mẹ vẫn tiếp tục, mẹ đừng quên chăm sóc chính mình." },
+];
+
+export const ageNote = (days: number): string => (AGE_NOTES.find((n) => days <= n.maxDays) ?? AGE_NOTES[AGE_NOTES.length - 1]).text;
 
 /** Shown when the quick-reply strip is empty (never after a Tier 3 reply). */
 export const DEFAULT_SUGGESTIONS: Record<"1" | "2", string[]> = {
   "1": ["Mình muốn kể thêm", "Mình cần một mẹo nhỏ"],
   "2": ["Mình nên hỏi bác sĩ điều gì?", "Mình muốn kể thêm"],
 };
-
-/** Starter topics at the top of the chat (hidden after a Tier 3 reply). */
-export const STARTERS = ["Bé khóc dỗ không nín", "Lo lắng về sữa mẹ", "Cảm giác một mình", "Vết mổ / vết khâu đau"];

@@ -190,22 +190,4 @@ describe("Chat header and pins", () => {
     expect(screen.getByRole("button", { name: "Bỏ ghim câu trả lời" })).toBeInTheDocument();
     expect(screen.getByLabelText("1 mục đã ghim")).toBeInTheDocument();
   });
-
-  it("offers starter topics, and hides them after a Tier 3 reply", () => {
-    const { unmount } = render(<App api={mockApi()} initial={inApp()} />);
-    expect(screen.getByRole("button", { name: "Bé khóc dỗ không nín" })).toBeInTheDocument();
-    unmount();
-    render(
-      <App
-        api={mockApi()}
-        initial={inApp({
-          messages: [
-            { role: "user", content: "x" },
-            { role: "assistant", content: "Mẹ gọi 115.", tier: "3-PHYSICAL", pinnable: false },
-          ],
-        })}
-      />,
-    );
-    expect(screen.queryByRole("button", { name: "Bé khóc dỗ không nín" })).not.toBeInTheDocument();
-  });
 });

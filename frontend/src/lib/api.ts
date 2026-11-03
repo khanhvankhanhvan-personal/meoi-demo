@@ -6,7 +6,9 @@ import type {
   Message,
   Note,
   Profile,
+  RecoveryFeel,
   SupportList,
+  SupportNeed,
   TrustedContact,
   User,
 } from "../types";
@@ -60,6 +62,9 @@ export function toApiProfile(profile: Profile | null, babies: Baby[]): ApiProfil
     birth_date: profile.birth,
     birth_type: profile.birthType,
     first_time: profile.firstTime,
+    csection_kind: profile.birthType === "csection" ? (profile.csectionKind ?? null) : null,
+    recovery_feel: profile.recoveryFeel ?? null,
+    support_needs: profile.supportNeeds ?? [],
     babies: babies.map((b) => ({ label: b.label, formula: b.formula, method: b.method })),
   };
 }
@@ -112,7 +117,14 @@ interface ServerCheckin {
   note?: string | null;
 }
 interface ServerProfile {
-  profile: { birth_date: string; birth_type: "normal" | "csection"; first_time: boolean } | null;
+  profile: {
+    birth_date: string;
+    birth_type: "normal" | "csection";
+    first_time: boolean;
+    csection_kind?: "planned" | "emergency" | null;
+    recovery_feel?: RecoveryFeel | null;
+    support_needs?: SupportNeed[];
+  } | null;
   babies: Baby[];
   trusted: TrustedContact;
 }
@@ -184,7 +196,14 @@ export const httpApi: Api = {
     }));
     return {
       profile: doc.profile
-        ? { birth: doc.profile.birth_date, birthType: doc.profile.birth_type, firstTime: doc.profile.first_time }
+        ? {
+            birth: doc.profile.birth_date,
+            birthType: doc.profile.birth_type,
+            csectionKind: doc.profile.csection_kind ?? null,
+            firstTime: doc.profile.first_time,
+            recoveryFeel: doc.profile.recovery_feel ?? null,
+            supportNeeds: doc.profile.support_needs ?? [],
+          }
         : null,
       babies: doc.babies,
       trusted: doc.trusted,
@@ -197,7 +216,14 @@ export const httpApi: Api = {
       method: "PUT",
       headers: JSON_HEADERS,
       body: JSON.stringify({
-        profile: { birth_date: profile.birth, birth_type: profile.birthType, first_time: profile.firstTime },
+        profile: {
+          birth_date: profile.birth,
+          birth_type: profile.birthType,
+          first_time: profile.firstTime,
+          csection_kind: profile.birthType === "csection" ? (profile.csectionKind ?? null) : null,
+          recovery_feel: profile.recoveryFeel ?? null,
+          support_needs: profile.supportNeeds ?? [],
+        },
         babies: babies.map((b) => ({ label: b.label, formula: b.formula, method: b.method })),
         trusted,
       }),

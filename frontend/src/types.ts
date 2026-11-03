@@ -54,7 +54,7 @@ export interface CheckinRecord {
 }
 
 export type Formula = "mom" | "only" | "mix";
-export type FeedMethod = "direct" | "pump" | "both";
+export type FeedMethod = "direct" | "pump" | "both" | "latch" | "bottle";
 
 export interface Baby {
   label: string;
@@ -65,8 +65,14 @@ export interface Baby {
 export interface Profile {
   birth: string; // YYYY-MM-DD
   birthType: "normal" | "csection";
+  csectionKind?: "planned" | "emergency" | null;
   firstTime: boolean;
+  recoveryFeel?: RecoveryFeel | null;
+  supportNeeds?: SupportNeed[];
 }
+
+export type RecoveryFeel = "wound_pain" | "ok" | "exhausted" | "need_help";
+export type SupportNeed = "night_listen" | "breastfeeding" | "exhaustion";
 
 export interface User {
   id: string;
@@ -106,5 +112,8 @@ export interface ApiProfile {
   birth_date: string;
   birth_type: "normal" | "csection";
   first_time: boolean;
+  csection_kind?: "planned" | "emergency" | null;
+  recovery_feel?: RecoveryFeel | null;
+  support_needs?: SupportNeed[];
   babies: { label: string; formula: Formula | null; method: FeedMethod | null }[];
 }
