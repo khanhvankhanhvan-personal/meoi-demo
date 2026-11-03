@@ -189,7 +189,7 @@ export const PARITY: Card<"first" | "other">[] = [
 ];
 
 export const BIRTH_KINDS: Card<"normal" | "planned" | "emergency">[] = [
-  { key: "normal", label: "Sinh thường (ngả âm đạo)", sub: "Theo dõi vết khâu tầng sinh môn và sự co hồi tử cung" },
+  { key: "normal", label: "Sinh thường", sub: "Theo dõi vết khâu tầng sinh môn và sự co hồi tử cung" },
   { key: "planned", label: "Sinh mổ chủ động (theo lịch)", sub: "Mổ chỉ định trước ngày dự sinh, cần chăm sóc vết mổ thành bụng" },
   { key: "emergency", label: "Sinh mổ cấp cứu (chuyển dạ rồi mổ)", sub: "Trải qua cả đau chuyển dạ và vết mổ, cơ thể thường mất nhiều sức hơn" },
 ];

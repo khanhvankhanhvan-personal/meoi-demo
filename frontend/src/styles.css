@@ -11,7 +11,7 @@
   --danger: #b3261e;
   --danger-surface: #f2c9c5;
   --radius: 16px;
-  --item: 44px; /* wheel row height; keep in sync with ITEM in WheelDatePicker.tsx */
+  --item: 40px; /* wheel row height; keep in sync with ITEM in WheelDatePicker.tsx */
 }
 
 * { box-sizing: border-box; }
@@ -404,3 +404,165 @@ h3 { font-size: 15px; }
 .account-who strong { overflow: hidden; text-overflow: ellipsis; }
 .logout-btn { min-height: 42px; padding: 0 14px; gap: 6px; flex: none; margin: 0; }
 .about h3 { display: flex; gap: 8px; align-items: center; margin-top: 0; }
+
+/* ===== Compact pass (2026-11-03): smaller type, tighter cards, softer corners, mobile first ===== */
+:root { --radius: 14px; --item: 40px; /* wheel row height; keep in sync with ITEM in WheelDatePicker.tsx */ }
+html { -webkit-text-size-adjust: 100%; }
+body { font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
+h1 { font-size: 24px; margin: 6px 0 10px; }
+h2 { font-size: 18px; margin: 10px 0; }
+h3 { font-size: 14px; margin: 14px 0 8px; }
+.small { font-size: 12.5px; }
+.lead { font-size: 15px; line-height: 1.55; }
+.page { padding: 10px 16px 20px; }
+.card { border-radius: 14px; padding: 12px 14px; margin: 10px 0; }
+.card.soft { border-radius: 14px; }
+.btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
+.btn.soft-btn { min-height: 38px; padding: 0 14px; font-size: 14px; }
+.btn.small-btn { min-height: 36px; padding: 0 14px; }
+.actions { gap: 10px; margin-top: 16px; }
+.field { margin: 8px 0; }
+input[type="text"], input[type="date"], input[type="tel"], input[type="password"], input:not([type]) { padding: 10px 12px; border-radius: 12px; }
+
+/* top bar and tabs */
+.topbar { padding: 10px 16px 6px; }
+.brand { font-size: 20px; }
+.support-btn { padding: 5px 12px; font-size: 13px; }
+.tabs { padding: 6px 4px 8px; }
+.tab { font-size: 11.5px; gap: 2px; }
+
+/* home */
+.home .greet { font-size: 28px; margin: 6px 0 4px; }
+.home .ask-feel { margin-bottom: 10px; }
+.cta { min-height: 52px; border-radius: 16px; font-size: 16px; margin: 2px 0 12px; box-shadow: 0 4px 12px rgba(184, 49, 89, 0.2); }
+.quote { font-size: 17px; margin: 8px 0; }
+.message-card .msg-from { font-size: 13px; }
+.avatar-sm { width: 22px; height: 22px; }
+.recent-list { border-radius: 14px; margin: 6px 0 12px; }
+.recent-row { padding: 10px 12px; gap: 10px; }
+.recent-emoji { font-size: 22px; }
+.recent-date { font-size: 13px; min-width: 36px; }
+.recent-text { font-size: 14.5px; }
+.section-head h2 { margin: 4px 0; }
+
+/* check-in sheet */
+.sheet.checkin-sheet { border-radius: 18px 18px 0 0; }
+.checkin-head { padding: 14px 16px 10px; }
+.checkin-head h2 { font-size: 20px; }
+.checkin-body { padding: 2px 16px 12px; }
+.checkin-body h3 { margin: 14px 0 8px; font-size: 14px; }
+.mood-row { gap: 6px; }
+.mood { padding: 8px 2px; border-radius: 12px; font-size: 12px; gap: 4px; border-width: 1.5px; }
+.mood-emoji { font-size: 26px; }
+.sleep-grid { gap: 6px; }
+.sleep { padding: 9px 10px; border-radius: 12px; gap: 8px; border-width: 1.5px; }
+.sleep strong { font-size: 14px; }
+.sleep small { font-size: 11.5px; }
+.sleep-emoji { font-size: 22px; }
+.pills { gap: 6px; }
+.pill-btn { padding: 7px 12px; font-size: 13.5px; }
+.note-input { border-radius: 12px; padding: 10px 12px; }
+.checkin-foot { padding: 10px 16px 14px; }
+.checkin-foot .btn { min-height: 48px; font-size: 16px; }
+
+/* diary */
+.diary h1, .settings h1 { font-size: 22px; }
+.tabsbar { padding: 4px; margin-bottom: 8px; }
+.tabsbar button { font-size: 13px; padding: 8px 4px; }
+.count { font-size: 10.5px; padding: 0 6px; }
+.mini-grid { gap: 8px; margin: 8px 0; }
+.mini { border-radius: 12px; padding: 8px 10px; }
+.mini strong { font-size: 15px; }
+.medical-cue { padding: 10px; border-radius: 12px; gap: 8px; }
+.medical-cue p { font-size: 13px; }
+.filters { margin: 10px 0 6px; gap: 6px; }
+.chip { border-radius: 12px; padding: 7px 11px; font-size: 13.5px; }
+.chip.pill { padding: 7px 12px; font-size: 13px; }
+.chip.quick { padding: 7px 12px; font-size: 13.5px; }
+.day.card { padding: 10px 12px; }
+.day-emoji { font-size: 26px; }
+.day-worries { font-size: 14px; margin: 6px 0 4px; }
+.mini-pill { font-size: 12.5px; padding: 4px 10px; }
+.search { border-radius: 12px; margin: 2px 0 8px; }
+.search input { padding: 10px 0; }
+.pin-card { padding: 12px 14px; }
+.pin-text { font-size: 15.5px; margin: 10px 0; }
+.asked { border-radius: 10px; padding: 8px 10px; font-size: 13.5px; }
+.cat-pill { font-size: 12px; padding: 3px 9px; }
+
+/* chat */
+.chat-head { padding: 6px 12px 8px; gap: 8px; }
+.avatar { width: 36px; height: 36px; font-size: 14px; }
+.chat-title strong { font-size: 16px; }
+.messages { padding: 8px 14px; gap: 8px; }
+.bubble { font-size: 15px; }
+.bubble.assistant { padding: 10px 10px 10px 14px; border-radius: 16px; }
+.bubble.user { border-radius: 16px 16px 4px 16px; padding: 9px 13px; }
+.strip { padding: 4px 14px 6px; }
+.composer { padding: 8px 12px 10px; gap: 8px; }
+.composer input { min-height: 42px; }
+.send { width: 42px; height: 42px; }
+.toast { bottom: 64px; font-size: 13.5px; padding: 8px 14px; border-radius: 10px; }
+
+/* onboarding */
+.ob-top { padding: 12px 16px 10px; gap: 10px; }
+.seg { height: 5px; }
+.ob-body { padding: 14px 16px 18px; }
+.ob-body h3 { font-size: 14px; margin: 14px 0 8px; }
+.ob-head h1, .ob-body > h1 { font-size: 24px; margin: 10px 0 6px; }
+.ob-tile { width: 44px; height: 44px; border-radius: 12px; }
+.ob-tile.big { width: 48px; height: 48px; }
+.ob-tile.round { width: 64px; height: 64px; }
+.welcome-card { margin: 12px 0 6px; }
+.bullets { gap: 8px; font-size: 14px; padding-top: 10px; margin-top: 10px; }
+.ob-bar { padding: 10px 16px 14px; }
+.ob-bar .btn.primary { min-height: 46px; padding: 0 20px; }
+.cards { gap: 8px; }
+.opt { padding: 9px 12px; border-radius: 12px; border-width: 1.5px; }
+.opt-title { font-size: 14.5px; }
+.opt-sub { font-size: 12.5px; line-height: 1.35; }
+.opt.row-opt { padding: 11px 12px; }
+.date-line { margin: 10px 0 2px; }
+.date-chip { font-size: 13px; padding: 3px 10px; }
+.quick-dates { margin: 6px 0 10px; }
+.age-card p { font-size: 14px; }
+.card-title { font-size: 15px; margin-bottom: 10px; }
+.num { width: 24px; height: 24px; font-size: 13px; }
+.end-actions { gap: 8px; margin-top: 16px; }
+.end-actions .btn { min-height: 48px; }
+
+/* settings */
+.section-label { margin: 16px 0 8px; font-size: 12px; }
+.settings h4 { margin: 12px 0 6px; font-size: 11.5px; }
+.info-grid { gap: 8px; }
+.info { border-radius: 12px; padding: 8px 10px; }
+.info strong { font-size: 14px; }
+.row-line { border-radius: 12px; padding: 10px 12px; }
+.row-line strong { font-size: 14px; }
+.dashed-btn { border-radius: 14px; padding: 12px; margin-top: 10px; font-size: 14px; }
+.logout-btn { min-height: 38px; }
+
+/* wheel date picker */
+.wheel-picker { margin: 10px 0; border-radius: 14px; }
+.wheel-item { font-size: 14.5px; }
+.wheel-item.on { font-size: 16px; }
+
+/* mobile first: real viewport height on phones, tighter still on narrow screens */
+@media (max-width: 520px) {
+  html, body, #root, .stage, .device, .screen { height: 100vh; }
+  @supports (height: 100dvh) { html, body, #root, .stage, .device, .screen { height: 100dvh; } }
+}
+@media (max-width: 380px) {
+  body { font-size: 14.5px; }
+  .page, .ob-body, .checkin-body { padding-left: 14px; padding-right: 14px; }
+  .home .greet { font-size: 26px; }
+  .mood-row { gap: 4px; }
+  .mood { font-size: 11.5px; }
+  .mood-emoji { font-size: 24px; }
+  .sleep-grid { grid-template-columns: 1fr; }
+  .info-grid, .mini-grid { grid-template-columns: 1fr; }
+  .tab { font-size: 11px; }
+  .cta { font-size: 15px; }
+  .ob-bar .btn.primary { padding: 0 14px; }
+  .tabsbar button { font-size: 12.5px; }
+}
