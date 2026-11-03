@@ -39,6 +39,15 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" />
     </>
   ),
+  lock: (
+    <>
+      <rect x="5" y="10.5" width="14" height="9.5" rx="2.5" />
+      <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" />
+    </>
+  ),
+  pencil: <path d="M4 20h4L19 9l-4-4L4 16Zm9.5-13.5 4 4" />,
+  save: <path d="M5 4h11l3 3v13H5ZM8 4v5h7V4M8 20v-6h8v6" />,
+  logout: <path d="M10 4H5v16h5M14 8l4 4-4 4M18 12H9" />,
   chevron: <path d="m9 6 6 6-6 6" />,
   close: <path d="M6 6l12 12M18 6 6 18" />,
   user: (

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { ApiError } from "../lib/api";
 import { useStore } from "../store";
+import { Icon } from "./Icons";
 
-/** Sign in / out and delete-account controls (profile screen). */
+/** Account: who is signed in, the Đăng xuất (log out) button, and delete-account. Guests get a sign-up card. */
 export function AccountCard() {
   const { state, dispatch, signOut, removeAccount } = useStore();
   const [confirming, setConfirming] = useState(false);
@@ -15,8 +16,8 @@ export function AccountCard() {
       <section className="card soft">
         <h3>Lưu lại những gì mẹ chia sẻ</h3>
         <p className="muted small">
-          Tạo tài khoản ẩn danh (chỉ cần biệt danh và mã PIN) để giữ lại hồ sơ, check-in và ghi chú đã ghim khi
-          mẹ quay lại. Không cần email hay số điện thoại.
+          Tạo tài khoản ẩn danh (chỉ cần biệt danh và mã PIN) để giữ lại hồ sơ, check-in và ghi chú đã ghim khi mẹ
+          quay lại. Không cần email hay số điện thoại.
         </p>
         <button className="btn primary" onClick={() => dispatch({ type: "go", screen: "auth" })}>
           Tạo tài khoản hoặc đăng nhập
@@ -43,11 +44,19 @@ export function AccountCard() {
   };
 
   return (
-    <section className="card">
-      <h3>Tài khoản</h3>
-      <p>
-        Mẹ đang đăng nhập với biệt danh <strong>{state.user.nickname}</strong>.
-      </p>
+    <section className="card account">
+      <div className="account-row">
+        <span className="avatar" aria-hidden="true">
+          {state.user.nickname.slice(0, 1).toUpperCase()}
+        </span>
+        <div className="account-who">
+          <span className="muted small">Mẹ đang đăng nhập với biệt danh</span>
+          <strong>{state.user.nickname}</strong>
+        </div>
+        <button className="btn logout-btn" onClick={() => void signOut()}>
+          <Icon name="logout" size={18} /> Đăng xuất
+        </button>
+      </div>
       <p className="muted small">
         Mình lưu hồ sơ, check-in và ghi chú mẹ ghim. Tin nhắn trò chuyện không được lưu.
       </p>
@@ -56,11 +65,6 @@ export function AccountCard() {
           Chưa lưu được lên tài khoản. Mẹ kiểm tra mạng nhé, mình sẽ thử lại khi mẹ thay đổi gì đó.
         </p>
       )}
-      <div className="actions">
-        <button className="btn" onClick={() => void signOut()}>
-          Đăng xuất
-        </button>
-      </div>
       {!confirming ? (
         <button className="link danger-link" onClick={() => setConfirming(true)}>
           Xoá tài khoản và toàn bộ dữ liệu
