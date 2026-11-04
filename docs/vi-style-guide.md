@@ -25,6 +25,7 @@ Người duyệt: Vân. Khi có mâu thuẫn, ý Vân thắng. Tài liệu này 
 | Ghim / Đã ghim / Bỏ ghim | **Lưu / Đã lưu / Gỡ khỏi mục "Đã lưu"** | Nút: "Lưu lại câu trả lời" |
 | Thông tin đã ghim | **Thông tin đã được lưu** | Tên tab |
 | Check-in (tiêu đề, nút, danh sách) | **Ghi nhận** | Ví dụ "Ghi nhận cảm xúc của mẹ hiện tại", "Ghi nhận gần đây của mẹ" |
+| Tâm sự (tên tab và tiêu đề trò chuyện) | **Mẹ Ơi!** | Tên thương hiệu làm tên tính năng; vẫn giữ "Tâm sự" khi là động từ ("Tâm sự về ngày này") |
 | Check-in cảm xúc (tiêu đề cửa sổ) | **Hôm nay mẹ ổn không?** | |
 | phương pháp ti (phụ đề cài đặt) | **phương pháp cho con bú** | Trong câu giải thích |
 | Bé vừa bú mẹ trực tiếp vừa ti bình | **Bé vừa ti mẹ trực tiếp vừa ti bình** | "Ti" dùng cho cả bú mẹ và bú bình |

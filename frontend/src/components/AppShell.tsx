@@ -7,7 +7,7 @@ import { SupportList } from "./SupportList";
 
 const TABS: { screen: Screen; label: string; icon: IconName }[] = [
   { screen: "home", label: "Trang chủ", icon: "home" },
-  { screen: "chat", label: "Tâm sự", icon: "chat" },
+  { screen: "chat", label: "Mẹ Ơi!", icon: "chat" },
   { screen: "history", label: "Nhật ký & Đã lưu", icon: "bookmark" },
 ];
 

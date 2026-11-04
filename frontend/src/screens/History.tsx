@@ -273,7 +273,7 @@ function PinnedHub() {
   if (state.notes.length === 0) {
     return (
       <section className="card soft">
-        Chưa có gì được lưu lại. Trong phần Tâm sự, mẹ bấm biểu tượng "Lưu" cạnh câu trả lời nào mẹ muốn giữ lại.
+        Chưa có gì được lưu lại. Trong phần Mẹ Ơi!, mẹ bấm biểu tượng "Lưu" cạnh câu trả lời nào mẹ muốn giữ lại.
       </section>
     );
   }

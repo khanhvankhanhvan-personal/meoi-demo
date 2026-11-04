@@ -45,7 +45,7 @@ export function Chat() {
           M!
         </span>
         <div className="chat-title">
-          <strong className="serif">Tâm sự cùng Mẹ Ơi!</strong>
+          <strong className="serif">Mẹ Ơi!</strong>
           <span className="muted small">Luôn ở đây cùng mẹ • Không phán xét</span>
         </div>
         <button
