@@ -10,6 +10,7 @@ from sqlalchemy.pool import StaticPool
 from app import models as _models  # noqa: F401  (registers the tables)
 from app.db import Base, get_db
 from app.main import app
+from app.memory import suggest_limiter
 from app.security import ip_lockout, nickname_lockout, signup_limiter
 
 
@@ -41,7 +42,7 @@ def client(engine: Engine, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
             yield session
 
     app.dependency_overrides[get_db] = _db
-    for limiter in (nickname_lockout, ip_lockout, signup_limiter):
+    for limiter in (nickname_lockout, ip_lockout, signup_limiter, suggest_limiter):
         limiter.reset()
     with TestClient(app) as c:
         yield c
