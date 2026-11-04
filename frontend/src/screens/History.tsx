@@ -47,7 +47,7 @@ export function History() {
           className={tab === "pins" ? "on" : ""}
           onClick={() => dispatch({ type: "openDiary", tab: "pins" })}
         >
-          <Icon name="bookmark" size={18} /> Thông tin đã ghim <span className="count">{state.notes.length}</span>
+          <Icon name="bookmark" size={18} /> Thông tin đã được lưu <span className="count">{state.notes.length}</span>
         </button>
       </div>
 
@@ -79,7 +79,7 @@ function HealthLog() {
   if (state.checkins.length === 0) {
     return (
       <section className="card soft">
-        Chưa có check-in nào. Mẹ bấm “Ghi nhận” để bắt đầu một ngày nhé — chỉ mất 1 phút.
+        Chưa có check-in nào. Mẹ bấm “Ghi nhận” để bắt đầu một ngày nhé
       </section>
     );
   }
@@ -273,7 +273,7 @@ function PinnedHub() {
   if (state.notes.length === 0) {
     return (
       <section className="card soft">
-        Chưa có gì được ghim. Trong phần Tâm sự, mẹ bấm biểu tượng đánh dấu cạnh câu trả lời nào mẹ muốn giữ lại.
+        Chưa có gì được lưu lại. Trong phần Tâm sự, mẹ bấm biểu tượng "Lưu" cạnh câu trả lời nào mẹ muốn giữ lại.
       </section>
     );
   }
@@ -284,7 +284,7 @@ function PinnedHub() {
         <Icon name="search" size={18} />
         <input
           type="search"
-          aria-label="Tìm trong thông tin đã ghim"
+          aria-label="Tìm trong thông tin đã lưu"
           placeholder="Tìm kiếm lời khuyên, mẹo dỗ bé, dinh dưỡng..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -320,7 +320,7 @@ function PinnedHub() {
                   </button>
                   <button
                     className="icon-btn"
-                    aria-label="Xoá khỏi mục đã ghim"
+                    aria-label="Xoá khỏi mục đã lưu"
                     onClick={() => dispatch({ type: "deleteNote", key: n.key })}
                   >
                     <Icon name="trash" size={18} />
@@ -328,7 +328,7 @@ function PinnedHub() {
                 </div>
               </div>
               <p className="pin-text">{n.text}</p>
-              {n.topic && n.topic !== "Check-in hôm nay" && (
+              {n.topic && n.topic !== "Ghi nhận hôm nay" && n.topic !== "Check-in hôm nay" && (
                 <div className="asked">
                   <strong>Mẹ hỏi:</strong> {n.topic}
                 </div>

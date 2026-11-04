@@ -87,8 +87,8 @@ export function Chat() {
                       <button
                         className={`pin${on ? " on" : ""}`}
                         aria-pressed={on}
-                        aria-label={on ? "Bỏ ghim câu trả lời" : "Ghim câu trả lời này"}
-                        title={on ? "Bỏ ghim lời khuyên này" : "Ghim lời khuyên này"}
+                        aria-label={on ? 'Gỡ khỏi mục "Đã lưu"' : "Lưu lại câu trả lời"}
+                        title={on ? 'Gỡ khỏi mục "Đã lưu"' : "Lưu lại câu trả lời"}
                         onClick={() => dispatch({ type: "togglePin", index: i, seg: k, now: new Date() })}
                       >
                         <Icon name="bookmark" filled={on} size={18} />

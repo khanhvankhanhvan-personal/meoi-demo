@@ -69,7 +69,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="tab-icon">
                 <Icon name={t.icon} filled={active && t.icon === "bookmark"} />
                 {t.screen === "history" && state.notes.length > 0 && (
-                  <span className="badge" aria-label={`${state.notes.length} mục đã ghim`}>
+                  <span className="badge" aria-label={`${state.notes.length} mục đã lưu`}>
                     {state.notes.length}
                   </span>
                 )}

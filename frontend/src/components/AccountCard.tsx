@@ -16,7 +16,7 @@ export function AccountCard() {
       <section className="card soft">
         <h3>Lưu lại những gì mẹ chia sẻ</h3>
         <p className="muted small">
-          Tạo tài khoản ẩn danh (chỉ cần biệt danh và mã PIN) để giữ lại hồ sơ, check-in và ghi chú đã ghim khi mẹ
+          Tạo tài khoản ẩn danh (chỉ cần biệt danh và mã PIN) để giữ lại hồ sơ, check-in và ghi chú đã lưu khi mẹ
           quay lại. Không cần email hay số điện thoại.
         </p>
         <button className="btn primary" onClick={() => dispatch({ type: "go", screen: "auth" })}>
@@ -58,7 +58,7 @@ export function AccountCard() {
         </button>
       </div>
       <p className="muted small">
-        Mình lưu hồ sơ, check-in và ghi chú mẹ ghim. Tin nhắn trò chuyện không được lưu.
+        Mình lưu hồ sơ, check-in và ghi chú mẹ lưu. Tin nhắn trò chuyện không được lưu.
       </p>
       {state.syncError && (
         <p className="error" role="status">

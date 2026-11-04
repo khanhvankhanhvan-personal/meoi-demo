@@ -43,5 +43,5 @@ export function reflect(checkins: CheckinRecord[]): string | null {
   if (tired.length >= 3) {
     return "Mình thấy mẹ đã mệt vài ngày liền — mẹ có muốn nói chuyện một chút không?";
   }
-  return `${recent.length} lần check-in gần đây — cảm ơn mẹ đã dành chút thời gian cho chính mình.`;
+  return `${recent.length} lần check-in gần đây — cảm ơn mẹ đã dành thời gian cho chính mình.`;
 }
