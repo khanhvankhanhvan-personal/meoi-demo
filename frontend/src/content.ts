@@ -244,6 +244,7 @@ export const DEFAULT_SUGGESTIONS: Record<"1" | "2", string[]> = {
 export const MEMORY_CATEGORIES: { key: import("./types").MemoryCategory; label: string; hint: string; emoji: string }[] = [
   { key: "life", label: "Cuộc sống & thói quen", hint: "Nhịp sinh hoạt, sở thích, điều mẹ hay làm", emoji: "🌿" },
   { key: "family", label: "Gia đình", hint: "Người thân, ai đang giúp mẹ", emoji: "🏠" },
+  { key: "child_dev", label: "Sự phát triển của con", hint: "Mốc của bé: lật, bò, ăn dặm, mọc răng, nhịp ngủ", emoji: "🌱" },
   { key: "feelings", label: "Cảm xúc", hint: "Điều mẹ đang cảm thấy, lo lắng", emoji: "💭" },
   { key: "body", label: "Sức khỏe cơ thể", hint: "Điều mẹ kể về cơ thể mình", emoji: "🩺" },
   { key: "work_money", label: "Công việc & tài chính", hint: "Đi làm lại, chi tiêu, tiền bạc", emoji: "💼" },

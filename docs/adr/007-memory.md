@@ -49,3 +49,7 @@ can be. This ADR records the answers Vân gave and the safeguards.
   pin/memory).
 - Future: memory across the mother's whole arc (work, household, money, a child at school) fits the same
   categories; new categories need a migration and a prompt review.
+
+## Update 2026-11-04: "Sự phát triển của con" (child_dev)
+
+Vân asked for a sixth topic, `child_dev`, because the child's development is one of the supports where mothers need memory most. It is on by default (it records what the mother says about her baby's milestones and rhythms, worded as attribution: "Mẹ kể rằng bé 5 tháng đã biết lật"). The extraction prompt now allows these facts but still forbids diagnoses, judging whether a baby is "normal", and serious-illness signs. Users who already saved topic settings must switch the new topic on themselves. The prompt change needs the tier evals graded again.

@@ -119,7 +119,7 @@ export interface ApiProfile {
 }
 
 /** "Bộ nhớ của mẹ": short facts about the mother, kept only after she confirms them. */
-export type MemoryCategory = "life" | "family" | "feelings" | "body" | "work_money";
+export type MemoryCategory = "life" | "family" | "child_dev" | "feelings" | "body" | "work_money";
 
 export interface Memory {
   id: string;

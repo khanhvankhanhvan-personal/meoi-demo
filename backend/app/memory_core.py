@@ -19,9 +19,15 @@ from app.security import read_access_token
 
 logger = logging.getLogger(__name__)
 
-Category = Literal["life", "family", "feelings", "body", "work_money"]
+Category = Literal["life", "family", "child_dev", "feelings", "body", "work_money"]
 CATEGORIES: tuple[str, ...] = get_args(Category)
-DEFAULT_TOPICS: list[str] = ["life", "family", "feelings", "work_money"]  # body is OFF by default
+DEFAULT_TOPICS: list[str] = [
+    "life",
+    "family",
+    "child_dev",
+    "feelings",
+    "work_money",
+]  # body is OFF by default
 
 PROMPT_MAX_ITEMS = 12
 PROMPT_MAX_CHARS = 3000

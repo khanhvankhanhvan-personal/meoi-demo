@@ -62,7 +62,7 @@ describe("Bộ nhớ của mẹ (settings)", () => {
     await user.click(screen.getByRole("switch", { name: "Sức khỏe cơ thể" }));
     expect(api.saveMemorySettings).toHaveBeenLastCalledWith({
       enabled: true,
-      topics: ["life", "family", "feelings", "work_money", "body"],
+      topics: ["life", "family", "child_dev", "feelings", "work_money", "body"],
     });
     await user.click(screen.getByRole("switch", { name: "Cho phép Mẹ Ơi! nhớ" }));
     expect(api.saveMemorySettings).toHaveBeenLastCalledWith(expect.objectContaining({ enabled: false }));

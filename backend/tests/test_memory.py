@@ -177,7 +177,10 @@ def test_cap_100_returns_409(client: TestClient, engine: Engine) -> None:
 def test_settings_defaults_and_update(client: TestClient) -> None:
     signup(client)
     r = client.get("/memories/settings").json()
-    assert r == {"enabled": True, "topics": ["life", "family", "feelings", "work_money"]}
+    assert r == {
+        "enabled": True,
+        "topics": ["life", "family", "child_dev", "feelings", "work_money"],
+    }
     r = client.put(
         "/memories/settings", json={"enabled": True, "topics": ["body", "life", "body"]}
     ).json()
@@ -186,6 +189,15 @@ def test_settings_defaults_and_update(client: TestClient) -> None:
     assert (
         client.put("/memories/settings", json={"enabled": True, "topics": ["x"]}).status_code == 422
     )
+
+
+def test_child_development_topic_is_on_by_default_and_can_be_stored(client: TestClient) -> None:
+    signup(client)
+    r = add(client, "Mẹ kể rằng bé 5 tháng đã biết lật.", "child_dev")
+    assert r.status_code == 201
+    assert r.json()["category"] == "child_dev"
+    client.put("/memories/settings", json={"enabled": True, "topics": ["life"]})
+    assert add(client, "Mẹ kể rằng bé bắt đầu mọc răng.", "child_dev").status_code == 400
 
 
 def test_delete_all(client: TestClient) -> None:

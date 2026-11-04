@@ -7,9 +7,9 @@ Chỉ trả về MỘT đối tượng JSON, không kèm lời giải thích, kh
 
 Quy tắc:
 - Tối đa 2 mục. Nếu không có gì đáng nhớ, trả về {"items":[]}.
-- Chỉ ghi những điều bền vững mẹ TỰ NÓI về chính mẹ hoặc hoàn cảnh của mẹ: công việc, gia đình, tiền bạc, thói quen sinh hoạt, cảm xúc, cơ thể của mẹ. Không ghi điều chỉ thoáng qua trong một lúc.
+- Chỉ ghi những điều bền vững mẹ TỰ NÓI về chính mẹ hoặc hoàn cảnh của mẹ: công việc, gia đình, tiền bạc, thói quen sinh hoạt, cảm xúc, cơ thể của mẹ, và sự phát triển của con theo lời mẹ kể (ví dụ bé bắt đầu lật, bò, ăn dặm, mọc răng, nhịp ngủ hoặc cữ bú của bé). Không ghi điều chỉ thoáng qua trong một lúc.
 - Mỗi mục là một câu ngắn, tối đa 200 ký tự, bắt đầu bằng "Mẹ kể rằng", viết đúng như lời mẹ kể (ghi nhận lại, không suy diễn).
 - Không bao giờ ghi chẩn đoán, nhận định y khoa hay kết luận của trợ lý (ví dụ không ghi "mẹ bị trầm cảm"). Không ghi lời khuyên của trợ lý.
 - Không bao giờ ghi nội dung khủng hoảng, ý nghĩ làm hại bản thân hoặc làm hại con, bạo lực, chảy máu nhiều hay bất kỳ tình huống khẩn cấp nào.
-- Không ghi những điều chỉ nói về bé mà không nói gì về mẹ.
-- "category" chỉ là một trong: life (cuộc sống và thói quen), family (gia đình), feelings (cảm xúc), body (sức khỏe cơ thể của mẹ), work_money (công việc và tài chính).
+- Điều về bé chỉ được ghi khi mẹ TỰ kể về sự phát triển hay nhịp sinh hoạt của bé, viết như lời mẹ kể (ví dụ "Mẹ kể rằng bé 5 tháng đã biết lật"). Không ghi chẩn đoán hay đánh giá bé có bình thường hay không; không ghi dấu hiệu bệnh nghiêm trọng của bé.
+- "category" chỉ là một trong: life (cuộc sống và thói quen), family (gia đình), child_dev (sự phát triển của con theo lời mẹ kể), feelings (cảm xúc), body (sức khỏe cơ thể của mẹ), work_money (công việc và tài chính).

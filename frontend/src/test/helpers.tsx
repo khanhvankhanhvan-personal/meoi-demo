@@ -62,7 +62,7 @@ export function mockApi(reply?: Partial<ChatReply>) {
     deleteMemory: vi.fn(async (...args: [string]) => void args),
     deleteAllMemories: vi.fn(async () => undefined),
     getMemorySettings: vi.fn(
-      async (): Promise<MemorySettings> => ({ enabled: true, topics: ["life", "family", "feelings", "work_money"] }),
+      async (): Promise<MemorySettings> => ({ enabled: true, topics: ["life", "family", "child_dev", "feelings", "work_money"] }),
     ),
     saveMemorySettings: vi.fn(async (s: MemorySettings) => s),
     suggestMemories: vi.fn(async (...args: [Message[]]): Promise<MemorySuggestion[]> => (void args, [])),

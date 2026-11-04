@@ -2,7 +2,6 @@ import { useState } from "react";
 import { AccountCard } from "../components/AccountCard";
 import { Icon } from "../components/Icons";
 import { CardChoice } from "../components/OnboardingParts";
-import { SupportList } from "../components/SupportList";
 import { WheelDatePicker } from "../components/WheelDatePicker";
 import {
   BABY_COUNTS,
@@ -82,11 +81,6 @@ export function Profile({ initialTab = "birth" }: { initialTab?: Tab }) {
           <span className="small muted">Ghi chú</span>
           <input value={state.trusted.notes} onChange={(e) => dispatch({ type: "setTrusted", trusted: { notes: e.target.value } })} />
         </label>
-      </section>
-
-      <section className="card">
-        <h3>Hỗ trợ khi mẹ cần</h3>
-        <SupportList />
       </section>
 
       <section className="card soft about">
