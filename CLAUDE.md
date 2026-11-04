@@ -6,6 +6,7 @@ It is also a capstone project (defense: 2026-11-04). The owner (Vân) is a solo,
 before making any product or safety decision listed under "Open decisions".
 
 All code, comments, commit messages, and ADRs: English. User-facing UI text and product content: Vietnamese.
+Before writing or changing ANY Vietnamese text a mother sees (UI, errors, scripted replies, prompts), read `docs/vi-style-guide.md`: Vietnamese that sounds natural to a mother is a core differentiator. Never copy a term from a reference design without checking it against the guide; if a term sounds stiff, translated or bureaucratic, ask Vân.
 
 ## Source of truth (read before coding)
 
