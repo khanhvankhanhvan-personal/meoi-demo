@@ -14,9 +14,10 @@ import {
 } from "../content";
 import { ageLabel, birthDateError, parseKey } from "../lib/dates";
 import { emptyBaby, useStore } from "../store";
+import { MemoryTab } from "./MemoryTab";
 import type { Baby, Profile as ProfileData, RecoveryFeel } from "../types";
 
-type Tab = "feeding" | "birth";
+type Tab = "feeding" | "birth" | "memory";
 type Kind = "normal" | "planned" | "emergency";
 
 const kindOf = (p: ProfileData): Kind | null => (p.birthType === "normal" ? "normal" : (p.csectionKind ?? null));
@@ -43,9 +44,12 @@ export function Profile({ initialTab = "birth" }: { initialTab?: Tab }) {
         <button role="tab" aria-selected={tab === "birth"} className={tab === "birth" ? "on" : ""} onClick={() => setTab("birth")}>
           <Icon name="lock" size={16} /> Hồ sơ sinh sản
         </button>
+        <button role="tab" aria-selected={tab === "memory"} className={tab === "memory" ? "on" : ""} onClick={() => setTab("memory")}>
+          <Icon name="heart" size={16} /> Bộ nhớ
+        </button>
       </div>
 
-      {tab === "feeding" ? <Feeding /> : <BirthProfile />}
+      {tab === "feeding" ? <Feeding /> : tab === "memory" ? <MemoryTab /> : <BirthProfile />}
 
       <h3 className="section-label">Trải nghiệm & Dữ liệu</h3>
       <button className="btn soft-btn wide" onClick={() => dispatch({ type: "go", screen: "onboarding" })}>

@@ -7,6 +7,10 @@ import type {
   Note,
   Profile,
   RecoveryFeel,
+  Memory,
+  MemoryCategory,
+  MemorySettings,
+  MemorySuggestion,
   SupportList,
   SupportNeed,
   TrustedContact,
@@ -43,6 +47,15 @@ export interface Api {
   saveCheckin(record: CheckinRecord): Promise<void>;
   addNote(note: Note): Promise<string>;
   deleteNote(id: string): Promise<void>;
+  listMemories(): Promise<Memory[]>;
+  addMemory(text: string, category: MemoryCategory): Promise<Memory>;
+  editMemory(id: string, text: string): Promise<Memory>;
+  deleteMemory(id: string): Promise<void>;
+  deleteAllMemories(): Promise<void>;
+  getMemorySettings(): Promise<MemorySettings>;
+  saveMemorySettings(settings: MemorySettings): Promise<MemorySettings>;
+  /** Ask the server what is worth remembering from the recent messages. Nothing is stored. */
+  suggestMemories(messages: Message[]): Promise<MemorySuggestion[]>;
 }
 
 export const MAX_HISTORY = 20;
@@ -128,6 +141,53 @@ interface ServerProfile {
   babies: Baby[];
   trusted: TrustedContact;
 }
+
+/** Memory calls (signed-in mothers only). */
+export const memoryApi: Pick<
+  Api,
+  | "listMemories"
+  | "addMemory"
+  | "editMemory"
+  | "deleteMemory"
+  | "deleteAllMemories"
+  | "getMemorySettings"
+  | "saveMemorySettings"
+  | "suggestMemories"
+> = {
+  async listMemories() {
+    return (await json<{ items: Memory[] }>(await call("/memories"))).items;
+  },
+  async addMemory(text, category) {
+    return json<Memory>(await post("/memories", { text, category }));
+  },
+  async editMemory(id, text) {
+    return json<Memory>(
+      await call(`/memories/${id}`, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify({ text }) }),
+    );
+  },
+  async deleteMemory(id) {
+    const res = await call(`/memories/${id}`, { method: "DELETE" });
+    if (!res.ok && res.status !== 404) throw await failure(res);
+  },
+  async deleteAllMemories() {
+    const res = await call("/memories", { method: "DELETE" });
+    if (!res.ok) throw await failure(res);
+  },
+  async getMemorySettings() {
+    return json<MemorySettings>(await call("/memories/settings"));
+  },
+  async saveMemorySettings(settings) {
+    return json<MemorySettings>(
+      await call("/memories/settings", { method: "PUT", headers: JSON_HEADERS, body: JSON.stringify(settings) }),
+    );
+  },
+  async suggestMemories(messages) {
+    const res = await post("/memories/suggest", {
+      messages: messages.slice(-8).map((m) => ({ role: m.role, content: m.content })),
+    });
+    return (await json<{ suggestions: MemorySuggestion[] }>(res)).suggestions;
+  },
+};
 
 /** The backend never stores chat. It receives only the last 20 messages, as plain role/content. */
 export const httpApi: Api = {
@@ -254,6 +314,7 @@ export const httpApi: Api = {
     const res = await call(`/notes/${id}`, { method: "DELETE" });
     if (!res.ok && res.status !== 404) throw await failure(res);
   },
+  ...memoryApi,
 };
 
 /** Always available, even offline. No opening status: only the server knows the Vietnam time. */

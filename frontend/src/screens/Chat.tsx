@@ -20,7 +20,7 @@ export function suggestionsFor(messages: Message[], sending: boolean): string[] 
 }
 
 export function Chat() {
-  const { state, dispatch, send } = useStore();
+  const { state, dispatch, send, rememberSuggestion, declineSuggestion } = useStore();
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -111,6 +111,23 @@ export function Chat() {
               {s}
             </button>
           ))}
+        </div>
+      )}
+
+      {state.memorySuggestion && (
+        <div className="memory-ask" role="group" aria-label="Gợi ý ghi nhớ">
+          <span className="memory-ask-title">
+            <Icon name="heart" size={16} /> Mình nhớ điều này nhé?
+          </span>
+          <p className="memory-ask-text">{state.memorySuggestion.text}</p>
+          <div className="actions">
+            <button className="btn" onClick={declineSuggestion}>
+              Không
+            </button>
+            <button className="btn primary" onClick={() => void rememberSuggestion()}>
+              Nhớ nhé
+            </button>
+          </div>
         </div>
       )}
 

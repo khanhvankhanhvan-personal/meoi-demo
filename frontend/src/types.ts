@@ -117,3 +117,23 @@ export interface ApiProfile {
   support_needs?: SupportNeed[];
   babies: { label: string; formula: Formula | null; method: FeedMethod | null }[];
 }
+
+/** "Bộ nhớ của mẹ": short facts about the mother, kept only after she confirms them. */
+export type MemoryCategory = "life" | "family" | "feelings" | "body" | "work_money";
+
+export interface Memory {
+  id: string;
+  text: string;
+  category: MemoryCategory;
+  created_at: string;
+}
+
+export interface MemorySettings {
+  enabled: boolean;
+  topics: MemoryCategory[];
+}
+
+export interface MemorySuggestion {
+  text: string;
+  category: MemoryCategory;
+}
