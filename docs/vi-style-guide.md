@@ -14,17 +14,36 @@ Người duyệt: Vân. Khi có mâu thuẫn, ý Vân thắng. Tài liệu này 
 
 ## Bảng từ (Vân duyệt)
 
-| Đang dùng | Vấn đề | Thay bằng | Trạng thái |
-|---|---|---|---|
-| Cuộc sinh của mẹ | Nghe không tự nhiên (Vân nhận xét 04/11) | _chờ Vân_ | cần quyết |
-| Phương pháp sinh, Kinh nghiệm sinh, Quá trình sinh | Nghe như biểu mẫu | _chờ Vân_ | cần quyết |
-| Cảm nhận hồi phục, Hồi phục ghi nhận | Cứng, dịch nghĩa | _chờ Vân_ | cần quyết |
-| Hồ sơ sinh sản | Nghe như hồ sơ bệnh viện | _chờ Vân_ | cần quyết |
-| ti / bú (Cách ti, Ti mẹ, Ti bình) | Mỗi vùng nói một kiểu | _chờ Vân_ | cần quyết |
-| ghim, Đã ghim | Từ công nghệ | _chờ Vân_ | cần quyết |
-| Check-in | Tiếng Anh | _chờ Vân_ | cần quyết |
-| Ghi nhận, Lượt ghi, Bộ lọc | Từ hành chính, công nghệ | _chờ Vân_ | cần quyết |
-| tầng sinh môn, co hồi tử cung, sản dịch | Thuật ngữ y khoa | _chờ Vân_ | cần quyết |
+Đã duyệt (Vân, 04/11/2026), đã áp dụng trong ứng dụng:
+
+| Trước | Sau | Ghi chú |
+|---|---|---|
+| Cuộc sinh của mẹ | **Trải nghiệm sinh** | Tiêu đề bước 2 |
+| Phương pháp sinh lần này của mẹ | **Cách thức sinh** | Bước 2 và nhãn trong hồ sơ |
+| Quá trình sinh của mẹ | **Hành trình sinh con của mẹ** | Mục trong hồ sơ |
+| Số lượng bé | **Mẹ sinh đơn hay sinh đôi/đa thai?** | Nhãn trong hồ sơ |
+| Ghim / Đã ghim / Bỏ ghim | **Lưu / Đã lưu / Gỡ khỏi mục "Đã lưu"** | Nút: "Lưu lại câu trả lời" |
+| Thông tin đã ghim | **Thông tin đã được lưu** | Tên tab |
+| Check-in (tiêu đề, nút, danh sách) | **Ghi nhận** | Ví dụ "Ghi nhận cảm xúc của mẹ hiện tại", "Ghi nhận gần đây của mẹ" |
+| Tâm sự (tên tab và tiêu đề trò chuyện) | **Mẹ Ơi!** | Tên thương hiệu làm tên tính năng; vẫn giữ "Tâm sự" khi là động từ ("Tâm sự về ngày này") |
+| Check-in cảm xúc (tiêu đề cửa sổ) | **Hôm nay mẹ ổn không?** | |
+| phương pháp ti (phụ đề cài đặt) | **phương pháp cho con bú** | Trong câu giải thích |
+| Bé vừa bú mẹ trực tiếp vừa ti bình | **Bé vừa ti mẹ trực tiếp vừa ti bình** | "Ti" dùng cho cả bú mẹ và bú bình |
+| Đang tập khớp ngậm / Đau rát | **Đang tập khớp ngậm** | |
+| Khám phá Trang chủ & Check-in ngay | **Mẹ hãy ghi nhận trạng thái cơ thể lúc này nhé** | Nút bước 5. Vân dán thêm "MẹƠi!" ở đầu, đã bỏ, cần xác nhận |
+
+Vân vẫn giữ chữ "check-in" trong vài câu (ví dụ "Chưa có check-in nào…", "Mình lưu hồ sơ, check-in và ghi chú mẹ lưu"). Cần quyết định: dùng thống nhất "ghi nhận" hay giữ "check-in" ở những chỗ này.
+
+Còn chờ Vân quyết:
+
+| Đang dùng | Vấn đề | Thay bằng |
+|---|---|---|
+| Kinh nghiệm sinh | Nghe như biểu mẫu | _chờ Vân_ |
+| Cảm nhận hồi phục, Hồi phục ghi nhận | Cứng, dịch nghĩa | _chờ Vân_ |
+| Hồ sơ sinh sản | Nghe như hồ sơ bệnh viện | _chờ Vân_ |
+| Ghi nhận (nút), Lượt ghi, Bộ lọc | Từ hành chính, công nghệ | _chờ Vân_ |
+| tầng sinh môn, co hồi tử cung, sản dịch | Thuật ngữ y khoa | _chờ Vân_ |
+| vượt cạn | Cách nói cũ | _chờ Vân_ |
 
 ## Cách phối hợp
 - Vân gửi bản sửa từ trang "Rà soát tiếng Việt" (mỗi dòng "Cũ → Mới") hoặc gõ thẳng trong chat.

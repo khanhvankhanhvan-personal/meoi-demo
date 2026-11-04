@@ -202,14 +202,16 @@ def add_note(body: NoteIn, user: CurrentUser, db: DB) -> NoteOut:
     # Safety invariant: Tier 3 is never pinned. Checked here so a modified client cannot bypass it.
     if is_tier3(body.tier) or match(body.topic) is not None or match(body.text) is not None:
         logger.info("note rejected: tier 3 user=%s", user.id)
-        raise HTTPException(400, "Nội dung này không ghim được. Nút Hỗ trợ luôn có ở phía trên.")
+        raise HTTPException(
+            400, "Nội dung này không lưu được. Mẹ có thể sử dụng nút Hỗ trợ luôn có ở phía trên."
+        )
     existing = db.scalar(select(Note).where(Note.user_id == user.id, Note.text == body.text))
     if existing:
         return _note_out(existing)
     if (
         db.scalar(select(func.count()).select_from(Note).where(Note.user_id == user.id)) or 0
     ) >= MAX_NOTES:
-        raise HTTPException(409, "Mẹ đã ghim nhiều rồi, mẹ xoá bớt ghi chú cũ nhé.")
+        raise HTTPException(409, "Danh sách đã lưu hơi đầy rồi, mẹ lọc bớt các nội dung cũ nhé!")
     note = Note(user_id=user.id, day=body.day, text=body.text, topic=body.topic)
     db.add(note)
     db.commit()

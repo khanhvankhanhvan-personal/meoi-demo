@@ -64,7 +64,7 @@ describe("sign in", () => {
     expect(go).toBeDisabled();
     await user.click(screen.getByRole("checkbox", { name: "Mẹ đã lưu mã này" }));
     await user.click(go);
-    expect(screen.getByText("Cuộc sinh của mẹ")).toBeInTheDocument(); // new account -> onboarding questions
+    expect(screen.getByText("Trải nghiệm sinh")).toBeInTheDocument(); // new account -> onboarding questions
     expect(screen.queryByText("ABCD-EFGH-JKLM-NPQR")).not.toBeInTheDocument();
   });
 
@@ -105,7 +105,7 @@ describe("saving to the account", () => {
     const user = userEvent.setup();
     const api = mockApi();
     render(<App api={api} initial={signedIn()} />);
-    await user.click(screen.getByRole("button", { name: "Check-in cảm xúc của mẹ hiện tại" }));
+    await user.click(screen.getByRole("button", { name: "Ghi nhận cảm xúc của mẹ hiện tại" }));
     await user.click(screen.getByRole("button", { name: /Kiệt sức/ }));
     await user.click(screen.getByRole("button", { name: "Lưu check-in này" }));
     await waitFor(() => expect(api.saveCheckin).toHaveBeenCalledTimes(1));
@@ -123,9 +123,9 @@ describe("saving to the account", () => {
       ],
     });
     render(<App api={api} initial={chat} />);
-    await user.click(screen.getByRole("button", { name: "Ghim câu trả lời này" }));
+    await user.click(screen.getByRole("button", { name: "Lưu lại câu trả lời" }));
     await waitFor(() => expect(api.addNote).toHaveBeenCalledWith(expect.objectContaining({ text: "Mẹ nghỉ khi bé ngủ nhé." })));
-    await user.click(screen.getByRole("button", { name: "Bỏ ghim câu trả lời" }));
+    await user.click(screen.getByRole("button", { name: 'Gỡ khỏi mục "Đã lưu"' }));
     await waitFor(() => expect(api.deleteNote).toHaveBeenCalledWith("note-1"));
   });
 
@@ -148,7 +148,7 @@ describe("saving to the account", () => {
     const user = userEvent.setup();
     const api = mockApi();
     render(<App api={api} initial={inApp({ screen: "home" })} />);
-    await user.click(screen.getByRole("button", { name: "Check-in cảm xúc của mẹ hiện tại" }));
+    await user.click(screen.getByRole("button", { name: "Ghi nhận cảm xúc của mẹ hiện tại" }));
     await user.click(screen.getByRole("button", { name: /Kiệt sức/ }));
     await user.click(screen.getByRole("button", { name: "Lưu check-in này" }));
     await new Promise((r) => setTimeout(r, 700));

@@ -38,12 +38,12 @@ export function Checkin() {
       <div
         className="sheet checkin-sheet"
         role="dialog"
-        aria-label="Check-in cảm xúc"
+        aria-label="Hôm nay mẹ ổn không?"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="checkin-head">
           <div>
-            <h2 className="serif">Check-in cảm xúc</h2>
+            <h2 className="serif">Hôm nay mẹ ổn không?</h2>
             <p className="muted small">Chỉ mất 1 phút để lắng nghe bản thân</p>
           </div>
           <button className="icon-btn" aria-label="Đóng" onClick={close}>

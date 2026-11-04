@@ -34,7 +34,7 @@ export function Home() {
         <section className="card soft nudge">
           <h3>Mẹ muốn mình nhớ giúp mẹ?</h3>
           <p className="muted small">
-            Tạo tài khoản ẩn danh (chỉ cần biệt danh và mã PIN) để giữ lại hồ sơ, check-in và ghi chú đã ghim.
+            Tạo tài khoản ẩn danh (chỉ cần biệt danh và mã PIN) để giữ lại hồ sơ, check-in và ghi chú đã lưu.
           </p>
           <div className="actions">
             <button className="btn" onClick={() => dispatch({ type: "dismissNudge" })}>
@@ -69,7 +69,7 @@ export function Home() {
 
       <button className="cta" onClick={() => dispatch({ type: "go", screen: "checkin" })}>
         <Icon name="sparkle" />
-        {doneToday ? "Cập nhật check-in hôm nay" : "Check-in cảm xúc của mẹ hiện tại"}
+        {doneToday ? "Cập nhật ghi nhận hôm nay" : "Ghi nhận cảm xúc của mẹ hiện tại"}
       </button>
 
       <button className="companion" onClick={() => dispatch({ type: "go", screen: "chat" })}>
@@ -100,7 +100,7 @@ export function Home() {
       {recent.length > 0 && (
         <section>
           <div className="section-head">
-            <h2 className="serif">Check-in gần đây</h2>
+            <h2 className="serif">Ghi nhận gần đây của mẹ</h2>
             <button className="link add" onClick={() => dispatch({ type: "go", screen: "checkin" })}>
               <Icon name="plus" size={18} /> Thêm
             </button>
@@ -111,7 +111,7 @@ export function Home() {
                 <button
                   className="recent-row"
                   onClick={() => dispatch({ type: "openDiary", tab: "log", day: c.key })}
-                  aria-label={`Check-in ngày ${c.date}`}
+                  aria-label={`Ghi nhận ngày ${c.date}`}
                 >
                   <span className="recent-emoji" aria-hidden="true">
                     {moodOf(c.moods[0] ?? "")?.emoji}

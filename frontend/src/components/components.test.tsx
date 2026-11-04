@@ -47,7 +47,7 @@ describe("Chat: pin and quick replies", () => {
         })}
       />,
     );
-    expect(screen.getByRole("button", { name: "Ghim câu trả lời này" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Lưu lại câu trả lời" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Con hơi sốt" })).toBeInTheDocument();
   });
 
@@ -65,7 +65,7 @@ describe("Chat: pin and quick replies", () => {
           })}
         />,
       );
-      expect(screen.queryByRole("button", { name: /ghim/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /Lưu lại câu trả lời|Gỡ khỏi mục/ })).not.toBeInTheDocument();
       expect(screen.queryByLabelText("Gợi ý trả lời nhanh")).not.toBeInTheDocument();
     },
   );
@@ -115,14 +115,14 @@ describe("Nhật ký & Đã lưu", () => {
     );
     expect(screen.getByText("Y tế & Phục hồi sau sinh")).toBeInTheDocument(); // auto category on the card
     expect(screen.getAllByText("Vỗ về tinh thần").length).toBeGreaterThan(1); // the pill on the card and the filter chip
-    await user.type(screen.getByLabelText("Tìm trong thông tin đã ghim"), "chuom am");
+    await user.type(screen.getByLabelText("Tìm trong thông tin đã lưu"), "chuom am");
     expect(screen.queryByText("Mẹ đừng tự trách mình nhé.")).not.toBeInTheDocument();
     expect(screen.getByText("Chườm ấm nhẹ nhàng trước khi cho bú.")).toBeInTheDocument();
-    await user.clear(screen.getByLabelText("Tìm trong thông tin đã ghim"));
-    const del = screen.getAllByRole("button", { name: "Xoá khỏi mục đã ghim" });
+    await user.clear(screen.getByLabelText("Tìm trong thông tin đã lưu"));
+    const del = screen.getAllByRole("button", { name: "Xoá khỏi mục đã lưu" });
     await user.click(del[0]);
-    await user.click(screen.getByRole("button", { name: "Xoá khỏi mục đã ghim" }));
-    expect(screen.getByText(/Chưa có gì được ghim/)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Xoá khỏi mục đã lưu" }));
+    expect(screen.getByText(/Chưa có gì được lưu lại/)).toBeInTheDocument();
   });
 
   it("shows the 7-day summary, the medical cue, and a day card that opens a chat about that day", async () => {
@@ -185,9 +185,9 @@ describe("Chat header and pins", () => {
         })}
       />,
     );
-    await user.click(screen.getAllByRole("button", { name: "Ghim câu trả lời này" })[1]);
-    expect(await screen.findByRole("status")).toHaveTextContent("Đã lưu vào Thông tin đã ghim");
-    expect(screen.getByRole("button", { name: "Bỏ ghim câu trả lời" })).toBeInTheDocument();
-    expect(screen.getByLabelText("1 mục đã ghim")).toBeInTheDocument();
+    await user.click(screen.getAllByRole("button", { name: "Lưu lại câu trả lời" })[1]);
+    expect(await screen.findByRole("status")).toHaveTextContent("Đã lưu vào hồ sơ của mẹ");
+    expect(screen.getByRole("button", { name: 'Gỡ khỏi mục "Đã lưu"' })).toBeInTheDocument();
+    expect(screen.getByLabelText("1 mục đã lưu")).toBeInTheDocument();
   });
 });

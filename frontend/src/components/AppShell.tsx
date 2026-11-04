@@ -7,7 +7,7 @@ import { SupportList } from "./SupportList";
 
 const TABS: { screen: Screen; label: string; icon: IconName }[] = [
   { screen: "home", label: "Trang chủ", icon: "home" },
-  { screen: "chat", label: "Tâm sự", icon: "chat" },
+  { screen: "chat", label: "Mẹ Ơi!", icon: "chat" },
   { screen: "history", label: "Nhật ký & Đã lưu", icon: "bookmark" },
 ];
 
@@ -69,7 +69,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="tab-icon">
                 <Icon name={t.icon} filled={active && t.icon === "bookmark"} />
                 {t.screen === "history" && state.notes.length > 0 && (
-                  <span className="badge" aria-label={`${state.notes.length} mục đã ghim`}>
+                  <span className="badge" aria-label={`${state.notes.length} mục đã lưu`}>
                     {state.notes.length}
                   </span>
                 )}

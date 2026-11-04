@@ -34,17 +34,17 @@ export function Profile({ initialTab = "birth" }: { initialTab?: Tab }) {
   return (
     <div className="page settings">
       <h1 className="serif">Cài đặt & Hồ sơ</h1>
-      <p className="muted small">Cập nhật phương pháp ti & hồ sơ sinh sản của mẹ</p>
+      <p className="muted small">Cập nhật phương pháp cho con bú & hồ sơ sinh sản của mẹ</p>
 
       <div className="tabsbar" role="tablist">
         <button role="tab" aria-selected={tab === "feeding"} className={tab === "feeding" ? "on" : ""} onClick={() => setTab("feeding")}>
           Cách ti & Sữa
         </button>
         <button role="tab" aria-selected={tab === "birth"} className={tab === "birth" ? "on" : ""} onClick={() => setTab("birth")}>
-          <Icon name="lock" size={16} /> Hồ sơ sinh sản
+          Hồ sơ sinh sản
         </button>
         <button role="tab" aria-selected={tab === "memory"} className={tab === "memory" ? "on" : ""} onClick={() => setTab("memory")}>
-          <Icon name="heart" size={16} /> Bộ nhớ
+          Bộ nhớ
         </button>
       </div>
 
@@ -161,7 +161,7 @@ function BirthProfile() {
               <strong>{state.babies.map((b) => b.label).filter(Boolean).join(", ") || "Chưa đặt tên"}</strong>
             </div>
             <div className="info">
-              <span className="muted small">Số lượng bé</span>
+              <span className="muted small">Mẹ sinh đơn hay sinh đôi/đa thai?</span>
               <strong>{countLabel ? `${countLabel.label} (${countLabel.sub})` : `${babyCount} bé`}</strong>
             </div>
             <div className="info">
@@ -175,14 +175,14 @@ function BirthProfile() {
               <strong className="pink">{ageLabel(p.birth)}</strong>
             </div>
           </div>
-          <h4>Quá trình sinh của mẹ</h4>
+          <h4>Hành trình sinh con của mẹ</h4>
           <div className="rows">
             <div className="row-line">
               <span className="muted small">Kinh nghiệm sinh</span>
               <strong>{p.firstTime ? "Lần đầu sinh con (Bé đầu lòng)" : "Đã từng sinh con"}</strong>
             </div>
             <div className="row-line">
-              <span className="muted small">Phương pháp sinh</span>
+              <span className="muted small">Cách thức sinh</span>
               <strong className="blue">{shortKind(kindOf(p))}</strong>
             </div>
             <div className="row-line">
@@ -191,8 +191,7 @@ function BirthProfile() {
             </div>
           </div>
           <p className="muted small note">
-            Hồ sơ sinh sản là thông tin gốc cố định sau khi vượt cạn. Mẹ Ơi! dựa vào đây để đồng hành đúng tuần tuổi và
-            phù hợp với thể trạng hồi phục của mẹ.
+            Hồ sơ sinh sản là thông tin gốc cố định sau khi vượt cạn. Mẹ Ơi! dựa vào đây để đồng hành theo lộ trình riêng của mẹ.
           </p>
         </section>
         <button className="dashed-btn" onClick={start}>
@@ -234,7 +233,7 @@ function BirthProfile() {
         <WheelDatePicker label="Ngày sinh của bé" value={draft.birth} onChange={(birth) => setDraft({ ...draft, birth })} />
       </div>
       {err ? <p className="error">{err}</p> : <p className="muted small">Con khoảng {ageLabel(draft.birth)}.</p>}
-      <h4>Quá trình sinh của mẹ</h4>
+      <h4>Hành trình sinh con của mẹ</h4>
       <CardChoice
         legend="Lần sinh"
         options={PARITY}

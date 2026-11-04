@@ -146,7 +146,7 @@ export function Auth() {
         )}
       </div>
       <p className="muted small">
-        Mình chỉ lưu hồ sơ, check-in và những ghi chú mẹ ghim. Tin nhắn trò chuyện không được lưu.
+        Mình chỉ lưu hồ sơ, check-in và những ghi chú mẹ lưu. Tin nhắn trò chuyện không được lưu.
       </p>
     </div>
   );

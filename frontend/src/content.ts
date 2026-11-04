@@ -171,8 +171,8 @@ export const FEED_FORMULA: Card<"mom" | "only" | "mix">[] = [
 export const FEED_METHOD: Card<"direct" | "pump" | "both" | "latch" | "bottle">[] = [
   { key: "direct", label: "Ti mẹ trực tiếp", sub: "Bé ngậm bú mẹ trực tiếp qua bầu ngực" },
   { key: "pump", label: "Hút sữa ra bình", sub: "Mẹ hút cữ đều đặn và cho con bú bình sữa mẹ" },
-  { key: "both", label: "Kết hợp ti mẹ & ti bình", sub: "Bé vừa bú mẹ trực tiếp vừa ti bình khi cần" },
-  { key: "latch", label: "Đang tập khớp ngậm / Đau rát", sub: "Con ngậm nông, nứt cổ gà hoặc mẹ đang chịu đau khi cho bú" },
+  { key: "both", label: "Kết hợp ti mẹ & ti bình", sub: "Bé vừa ti mẹ trực tiếp vừa ti bình khi cần" },
+  { key: "latch", label: "Đang tập khớp ngậm", sub: "Con ngậm nông, nứt cổ gà hoặc mẹ đang chịu đau khi cho bú" },
   { key: "bottle", label: "Ti bình sữa công thức", sub: "Bé dùng bình với sữa công thức" },
 ];
 

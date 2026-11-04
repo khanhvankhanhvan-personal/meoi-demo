@@ -173,9 +173,9 @@ export function reducer(state: State, action: Action): State {
       if (!m || m.role !== "assistant" || m.error || m.pinnable === false || isTier3(m.tier)) return state;
       const text = action.seg !== undefined && m.segments ? (m.segments[action.seg] ?? m.content) : m.content;
       if (state.notes.some((n) => n.key === text)) {
-        return { ...state, notes: state.notes.filter((n) => n.key !== text), toast: "Đã bỏ ghim" };
+        return { ...state, notes: state.notes.filter((n) => n.key !== text), toast: "Đã bỏ lưu" };
       }
-      let topic = "Check-in hôm nay";
+      let topic = "Ghi nhận hôm nay";
       for (let k = action.index - 1; k >= 0; k--) {
         if (state.messages[k].role === "user") {
           topic = state.messages[k].content;
@@ -189,7 +189,7 @@ export function reducer(state: State, action: Action): State {
         date: vf(action.now),
         dkey: kf(action.now),
       };
-      return { ...state, notes: [...state.notes, note], toast: "Đã lưu vào Thông tin đã ghim" };
+      return { ...state, notes: [...state.notes, note], toast: "Đã lưu vào hồ sơ của mẹ" };
     }
     case "openDiary":
       return { ...state, screen: "history", diaryTab: action.tab, selDay: action.day ?? null };

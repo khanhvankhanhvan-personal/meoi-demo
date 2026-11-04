@@ -83,7 +83,7 @@ export function Intake() {
         <div className="ob-body">
           <StepHead
             icon="pulse"
-            title="Cuộc sinh của mẹ"
+            title="Trải nghiệm sinh"
             lead="Hiểu được lần sinh này giúp Mẹ Ơi! đồng hành sát sao và chăm sóc thể chất của mẹ đúng cách hơn."
           />
           <h3>1. Lần này mẹ sinh bao nhiêu bé?</h3>
@@ -101,7 +101,7 @@ export function Intake() {
           />
           <h3>2. Đây có phải lần đầu mẹ sinh con không?</h3>
           <CardChoice legend="Lần sinh" options={PARITY} value={parity} onChange={setParity} />
-          <h3>3. Phương pháp sinh lần này của mẹ:</h3>
+          <h3>3. Cách thức sinh:</h3>
           <CardChoice legend="Cách sinh" options={BIRTH_KINDS} value={kind} onChange={setKind} />
           <h3>4. Cảm nhận hồi phục hiện tại của mẹ:</h3>
           <CardChoice
@@ -245,7 +245,7 @@ export function Intake() {
         <MultiChoice legend="Cần hỗ trợ" options={SUPPORT_NEEDS} values={needs} onChange={setNeeds} />
         <div className="end-actions">
           <button className="btn primary wide" onClick={() => finish("checkin")}>
-            Khám phá Trang chủ & Check-in ngay →
+            Mẹ hãy ghi nhận trạng thái cơ thể lúc này nhé →
           </button>
           <button className="btn soft-btn wide" onClick={() => finish("chat")}>
             <Icon name="chat" size={18} /> Tâm sự cùng Mẹ Ơi! ngay bây giờ

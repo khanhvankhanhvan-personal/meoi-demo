@@ -57,7 +57,7 @@ describe("smoke: intake -> check-in -> chat", () => {
     // step 5: summary, one help need, then straight into the check-in
     expect(screen.getByText("Mẹ đã làm rất tuyệt vời rồi.")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /Lắng nghe lúc 2h sáng/ }));
-    await user.click(screen.getByRole("button", { name: /Khám phá Trang chủ & Check-in ngay/ }));
+    await user.click(screen.getByRole("button", { name: /Mẹ hãy ghi nhận trạng thái cơ thể lúc này nhé/ }));
 
     // home with the check-in sheet open
     expect(screen.getByText("Chào mẹ.")).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe("smoke: intake -> check-in -> chat", () => {
     expect(within(banner).getByRole("link", { name: "Cấp cứu 115" })).toHaveAttribute("href", "tel:115");
     expect(screen.getByText("Mẹ gọi HOPE ngay bây giờ nhé.")).toBeInTheDocument();
     // only the Tier 1 opener can be pinned; the Tier 3 reply has no pin
-    expect(screen.getAllByRole("button", { name: /ghim/i })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: /Lưu lại câu trả lời|Gỡ khỏi mục/ })).toHaveLength(1);
 
     // what was sent: opener + user message (assistant first), and the mapped profile
     expect(api.sendChat).toHaveBeenCalledOnce();
@@ -116,7 +116,7 @@ describe("smoke: intake -> check-in -> chat", () => {
     await user.type(screen.getByLabelText("Tin nhắn"), "Hôm nay em mệt");
     await user.click(screen.getByRole("button", { name: "Gửi" }));
     expect(await screen.findByText(/Mình chưa trả lời được lúc này/)).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /ghim/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Lưu lại câu trả lời|Gỡ khỏi mục/ })).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Hỗ trợ" }));
     expect(await screen.findByRole("link", { name: /Cấp cứu 115/ })).toBeInTheDocument();
   });
