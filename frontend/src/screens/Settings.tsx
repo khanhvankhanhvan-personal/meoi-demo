@@ -41,10 +41,10 @@ export function Profile({ initialTab = "birth" }: { initialTab?: Tab }) {
           Cách ti & Sữa
         </button>
         <button role="tab" aria-selected={tab === "birth"} className={tab === "birth" ? "on" : ""} onClick={() => setTab("birth")}>
-          <Icon name="lock" size={16} /> Hồ sơ sinh sản
+          Hồ sơ sinh sản
         </button>
         <button role="tab" aria-selected={tab === "memory"} className={tab === "memory" ? "on" : ""} onClick={() => setTab("memory")}>
-          <Icon name="heart" size={16} /> Bộ nhớ
+          Bộ nhớ
         </button>
       </div>
 

@@ -678,3 +678,9 @@ body { background: linear-gradient(180deg, #fffdfd 0%, #fafbfd 55%, #f5f8fa 100%
 .memory-ask-text { margin: 4px 0 2px; font-size: 14.5px; }
 .memory-ask .actions { margin-top: 8px; }
 .memory-ask .btn { min-height: 40px; }
+
+/* One line per label: no orphaned words on tabs, buttons and short titles */
+.tabsbar button, .tab-label, .cat-pill, .count, .mini-pill { white-space: nowrap; }
+.btn, .chip, .opt-title { text-wrap: balance; }
+h1, h2, h3, h4, .lead, .quote, .moment, .opt-sub, .text, .mem-text, .pin-text { text-wrap: balance; }
+.tabsbar button { padding-left: 6px; padding-right: 6px; }
