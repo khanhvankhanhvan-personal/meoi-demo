@@ -18,7 +18,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import Baby, Checkin, Note, Profile, RefreshToken, User
+from app.models import Baby, Checkin, Memory, MemorySetting, Note, Profile, RefreshToken, User
 from app.security import (
     ACCESS_TTL,
     REFRESH_TTL,
@@ -305,7 +305,7 @@ def delete_account(
     if not verify_secret(user.pin_hash, body.pin):
         _record_failure(key, ip)
         raise HTTPException(401, "Mã PIN chưa đúng.")
-    for table in (Note, Checkin, Baby, Profile, RefreshToken):
+    for table in (Memory, MemorySetting, Note, Checkin, Baby, Profile, RefreshToken):
         db.execute(delete(table).where(table.user_id == user.id))
     db.delete(user)
     db.commit()

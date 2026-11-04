@@ -240,3 +240,11 @@ export const DEFAULT_SUGGESTIONS: Record<"1" | "2", string[]> = {
   "1": ["Mình muốn kể thêm", "Mình cần một mẹo nhỏ"],
   "2": ["Mình nên hỏi bác sĩ điều gì?", "Mình muốn kể thêm"],
 };
+
+export const MEMORY_CATEGORIES: { key: import("./types").MemoryCategory; label: string; hint: string; emoji: string }[] = [
+  { key: "life", label: "Cuộc sống & thói quen", hint: "Nhịp sinh hoạt, sở thích, điều mẹ hay làm", emoji: "🌿" },
+  { key: "family", label: "Gia đình", hint: "Người thân, ai đang giúp mẹ", emoji: "🏠" },
+  { key: "feelings", label: "Cảm xúc", hint: "Điều mẹ đang cảm thấy, lo lắng", emoji: "💭" },
+  { key: "body", label: "Sức khỏe cơ thể", hint: "Điều mẹ kể về cơ thể mình", emoji: "🩺" },
+  { key: "work_money", label: "Công việc & tài chính", hint: "Đi làm lại, chi tiêu, tiền bạc", emoji: "💼" },
+];

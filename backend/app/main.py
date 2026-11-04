@@ -9,6 +9,7 @@ from app.auth import account_router
 from app.auth import router as auth_router
 from app.chat import router as chat_router
 from app.data import router as data_router
+from app.memory import router as memory_router
 from app.support import router as support_router
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -21,6 +22,7 @@ def build_api() -> FastAPI:
     api.include_router(auth_router)
     api.include_router(account_router)
     api.include_router(data_router)
+    api.include_router(memory_router)
 
     @api.get("/health")
     def health() -> dict[str, str]:

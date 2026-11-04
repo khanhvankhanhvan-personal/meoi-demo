@@ -104,3 +104,28 @@ class Note(Base):
     text: Mapped[str] = mapped_column(Text)
     topic: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
+
+
+class Memory(Base):
+    """One short fact about the mother, worded as her own words ("Mẹ kể rằng ..."). She owns it."""
+
+    __tablename__ = "memories"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    text: Mapped[str] = mapped_column(String(200))
+    category: Mapped[str] = mapped_column(String(12))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
+
+
+class MemorySetting(Base):
+    __tablename__ = "memory_settings"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    topics: Mapped[list[str]] = mapped_column(JSON, default=list)

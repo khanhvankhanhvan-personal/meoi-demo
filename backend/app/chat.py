@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 from app.hours import hope_open
 from app.llm import LLMClient, LLMNotConfigured, get_llm
+from app.memory_core import MemoryLoader, memory_loader
 from app.prompts import ProfileIn, build_system_prompt
 from app.replies import is_tier3, parse_reply
 from app.safety import match
@@ -92,11 +93,23 @@ def normalise_history(messages: list[ChatMessage]) -> list[dict[str, str]]:
     return out
 
 
+def _load_memory(loader: MemoryLoader | None) -> list[str]:
+    """Memory is context only: any failure means no memory, never a failed chat."""
+    if loader is None:
+        return []
+    try:
+        return loader()
+    except Exception as exc:
+        logger.warning("memory load failed: %s", type(exc).__name__)
+        return []
+
+
 async def respond(
     req: ChatRequest,
     now: datetime,
     llm_factory: Callable[[], LLMClient],
     skip_match: bool = False,
+    memory: MemoryLoader | None = None,
 ) -> ChatReply:
     """Core pipeline, shared by the API route and the tier eval runner.
 
@@ -117,9 +130,10 @@ async def respond(
         llm = llm_factory()
     except LLMNotConfigured as exc:
         raise HTTPException(status_code=503, detail="llm_not_configured") from exc
+    memory_items = _load_memory(memory)
     try:
         raw = await llm.complete(
-            build_system_prompt(req.profile, now),
+            build_system_prompt(req.profile, now, memory_items),
             normalise_history(req.messages),
         )
     except Exception as exc:  # network, rate limit, API error: never log the request content
@@ -150,5 +164,6 @@ async def send(
     req: ChatRequest,
     now: datetime = Depends(get_now),
     provider: Callable[[], LLMClient] = Depends(llm_provider),
+    memory: MemoryLoader | None = Depends(memory_loader),
 ) -> ChatReply:
-    return await respond(req, now, provider)
+    return await respond(req, now, provider, memory=memory)

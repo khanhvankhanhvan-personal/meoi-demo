@@ -16,6 +16,7 @@ import type {
   ChatReply,
   CheckinRecord,
   Crisis,
+  MemorySuggestion,
   Message,
   Note,
   Profile,
@@ -47,6 +48,7 @@ export interface State {
   nudgeDismissed: boolean;
   diaryTab: "log" | "pins"; // which part of "Nhật ký & Đã lưu" is open
   toast: string | null;
+  memorySuggestion: MemorySuggestion | null; // waiting for her to say yes or no
 }
 
 export const emptyBaby = (): Baby => ({ label: "", formula: null, method: null });
@@ -69,6 +71,7 @@ export const initialState: State = {
   nudgeDismissed: false,
   diaryTab: "log",
   toast: null,
+  memorySuggestion: null,
 };
 
 export const isTier3 = (tier?: string | null): boolean => !!tier && tier.startsWith("3");
@@ -90,6 +93,8 @@ export type Action =
   | { type: "chatAbout"; record: CheckinRecord }
   | { type: "newChat" }
   | { type: "clearToast" }
+  | { type: "memorySuggested"; suggestion: MemorySuggestion }
+  | { type: "memoryAnswered"; toast?: string }
   | { type: "deleteNote"; key: string }
   | { type: "booted" }
   | { type: "signedIn"; user: User; account: Account | null; recoveryCode: string | null }
@@ -191,9 +196,13 @@ export function reducer(state: State, action: Action): State {
     case "chatAbout":
       return { ...state, screen: "chat", messages: [...state.messages, mkOpener(action.record)] };
     case "newChat":
-      return { ...state, messages: [], crisis: null };
+      return { ...state, messages: [], crisis: null, memorySuggestion: null };
     case "clearToast":
       return state.toast ? { ...state, toast: null } : state;
+    case "memorySuggested":
+      return { ...state, memorySuggestion: action.suggestion };
+    case "memoryAnswered":
+      return { ...state, memorySuggestion: null, toast: action.toast ?? state.toast };
     case "deleteNote":
       return { ...state, notes: state.notes.filter((n) => n.key !== action.key) };
     case "booted":
@@ -235,6 +244,10 @@ interface Store {
   /** Call after a successful register / login / PIN reset: loads the account and moves on. */
   signIn: (session: Session) => Promise<void>;
   signOut: () => Promise<void>;
+  /** She said yes to the memory the app suggested. */
+  rememberSuggestion: () => Promise<void>;
+  /** She said no: do not suggest the same thing again in this conversation. */
+  declineSuggestion: () => void;
   /** Deletes the account and everything saved for it (needs the PIN; throws ApiError if it is wrong). */
   removeAccount: (pin: string) => Promise<void>;
 }
@@ -268,6 +281,27 @@ export function StoreProvider({
   const busy = useRef(false);
   const again = useRef(false);
 
+  // Memory suggestions: only for signed-in mothers, never after a Tier 3 reply, at most every 3 of her messages.
+  const lastChecked = useRef(0);
+  const declined = useRef(new Set<string>());
+
+  const maybeSuggest = useCallback(
+    async (history: Message[], tier: string, reply: Message) => {
+      if (!ref.current.user || isTier3(tier) || ref.current.memorySuggestion) return;
+      const turns = history.filter((m) => m.role === "user").length;
+      if (turns - lastChecked.current < 3) return;
+      lastChecked.current = turns;
+      try {
+        const found = await api.suggestMemories([...history, reply]);
+        const next = found.find((x) => !declined.current.has(x.text));
+        if (next) dispatch({ type: "memorySuggested", suggestion: next });
+      } catch {
+        /* a failed suggestion must never get in the way of the chat */
+      }
+    },
+    [api],
+  );
+
   const send = useCallback(
     async (text: string) => {
       const t = text.trim();
@@ -276,13 +310,32 @@ export function StoreProvider({
       const profile = toApiProfile(ref.current.profile, ref.current.babies);
       dispatch({ type: "userSent", text: t });
       try {
-        dispatch({ type: "replied", reply: await api.sendChat(history, profile) });
+        const reply = await api.sendChat(history, profile);
+        dispatch({ type: "replied", reply });
+        void maybeSuggest(history, reply.tier, { role: "assistant", content: reply.segments.join("\n\n") });
       } catch {
         dispatch({ type: "failed" });
       }
     },
-    [api],
+    [api, maybeSuggest],
   );
+
+  const rememberSuggestion = useCallback(async () => {
+    const s = ref.current.memorySuggestion;
+    if (!s) return;
+    try {
+      await api.addMemory(s.text, s.category);
+      dispatch({ type: "memoryAnswered", toast: "Mình đã nhớ điều này" });
+    } catch {
+      dispatch({ type: "memoryAnswered", toast: "Chưa lưu được, mẹ thử lại sau nhé" });
+    }
+  }, [api]);
+
+  const declineSuggestion = useCallback(() => {
+    const s = ref.current.memorySuggestion;
+    if (s) declined.current.add(s.text);
+    dispatch({ type: "memoryAnswered" });
+  }, []);
 
   const prime = useCallback((account: Account) => {
     synced.current = {
@@ -413,9 +466,27 @@ export function StoreProvider({
     return () => clearTimeout(t);
   }, [state.user, state.profile, state.babies, state.trusted, state.checkins, state.notes, flush]);
 
+  const dispatchTracked = useCallback((a: Action) => {
+    if (a.type === "newChat" || a.type === "signedOut") {
+      lastChecked.current = 0;
+      declined.current.clear();
+    }
+    dispatch(a);
+  }, []);
+
   const value = useMemo(
-    () => ({ state, dispatch, send, api, signIn, signOut, removeAccount }),
-    [state, send, api, signIn, signOut, removeAccount],
+    () => ({
+      state,
+      dispatch: dispatchTracked,
+      send,
+      api,
+      signIn,
+      signOut,
+      removeAccount,
+      rememberSuggestion,
+      declineSuggestion,
+    }),
+    [state, dispatchTracked, send, api, signIn, signOut, removeAccount, rememberSuggestion, declineSuggestion],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
